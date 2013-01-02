@@ -68,11 +68,6 @@ f2.close()
 
 ###########################################################################################################################
 
-figure_name_h = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/High_fq_callers.png"
-figure_name_m = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/Medium_fq_callers.png"
-figure_name_l = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/Low_fq_callers.png"
-print(figure_name_h,figure_name_m,figure_name_l)
-
 m = Basemap(llcrnrlon=-9, \
                 llcrnrlat=3.8, \
                 urcrnrlon=-1.5, \
@@ -81,6 +76,11 @@ m = Basemap(llcrnrlon=-9, \
                 projection = 'tmerc', \
                 lat_0 = 7.38, \
                 lon_0 = -5.30)
+
+figure_name_h = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/High_fq_callers_percent.png"
+figure_name_m = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/Medium_fq_callers_percent.png"
+figure_name_l = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/map by fq calling/Low_fq_callers_percent.png"
+print(figure_name_h,figure_name_m,figure_name_l)
     
 
 # read the shapefile archive
@@ -99,7 +99,12 @@ num = []
 for subpref in range(1,256):
     lons.append(subpref_coord[subpref][0])
     lats.append(subpref_coord[subpref][1])
-    num.append(users_by_calling_fq_per_subpref[subpref]['h'])
+    total = users_by_calling_fq_per_subpref[subpref]['h'] + users_by_calling_fq_per_subpref[subpref]['m'] + users_by_calling_fq_per_subpref[subpref]['l']
+    if total <> 0:
+        pct = int((float(users_by_calling_fq_per_subpref[subpref]['h']) / float(total)) * 100)
+    else:
+        pct = 0
+    num.append(pct)
  
 x, y = m(lons, lats)
 m.scatter(x, y, color='red')
@@ -123,7 +128,12 @@ num = []
 for subpref in range(1,256):
     lons.append(subpref_coord[subpref][0])
     lats.append(subpref_coord[subpref][1])
-    num.append(users_by_calling_fq_per_subpref[subpref]['m'])
+    total = users_by_calling_fq_per_subpref[subpref]['h'] + users_by_calling_fq_per_subpref[subpref]['m'] + users_by_calling_fq_per_subpref[subpref]['l']
+    if total <> 0:
+        pct = int((float(users_by_calling_fq_per_subpref[subpref]['m']) / float(total)) * 100)
+    else:
+        pct = 0
+    num.append(pct)
  
 x, y = m(lons, lats)
 m.scatter(x, y, color='green')
@@ -140,11 +150,21 @@ plt.clf()
 # read the shapefile archive
 s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
 
+# data to plot on the map    
+lons = []
+lats = []
+num = []
+
 # if wanna plot number of users whose this is home subpref
 for subpref in range(1,256):
     lons.append(subpref_coord[subpref][0])
     lats.append(subpref_coord[subpref][1])
-    num.append(users_by_calling_fq_per_subpref[subpref]['l'])
+    total = users_by_calling_fq_per_subpref[subpref]['h'] + users_by_calling_fq_per_subpref[subpref]['m'] + users_by_calling_fq_per_subpref[subpref]['l']
+    if total <> 0:
+        pct = int((float(users_by_calling_fq_per_subpref[subpref]['l']) / float(total)) * 100)
+    else:
+        pct = 0
+    num.append(pct)
  
 x, y = m(lons, lats)
 m.scatter(x, y, color='yellow')
