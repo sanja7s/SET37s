@@ -202,6 +202,42 @@ plt.clf()
 # read the shapefile archive
 s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
 
+
+
+####################TEST#############################################################################
+#from matplotlib.collections import LineCollection
+#from matplotlib import cm
+#from shapelib import ShapeFile
+#
+#s = ShapeFile(r"/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE")
+#
+#fig = plt.figure(figsize=(11.7,8.3))
+##Custom adjust of the subplots
+#plt.subplots_adjust(left=0.05,right=0.95,top=0.90,bottom=0.05,wspace=0.15,hspace=0.05)
+#ax = plt.subplot(111)
+#
+#for npoly in range(s.info()[0]):
+#    shpsegs = []
+#    shpinfo = []
+#    
+#    shp_object = s.read_object(npoly)
+#    verts = shp_object.vertices()
+#    rings = len(verts)
+#    for ring in range(rings):
+#        lons, lats = zip(*verts[ring])
+#        x, y = m(lons, lats)
+#        shpsegs.append(zip(x,y))
+#    lines = LineCollection(shpsegs,antialiaseds=(1,))
+#    lines.set_facecolors(cm.jet(n.random.rand(1)))
+#    lines.set_edgecolors('k')
+#    lines.set_linewidth(0.3)
+#    ax.add_collection(lines)
+#    
+#    m.drawcoastlines()
+# 
+#plt.savefig('tutorial07.png',dpi=300)
+#plt.show()    
+
 # data to plot on the map    
 lons = []
 lats = []
@@ -215,7 +251,9 @@ for subpref in range(1,256):
     num.append(float_label)
  
 x, y = m(lons, lats)
-m.scatter(x, y, color='blue')
+#m.scatter(x, y, color='blue')
+#CS1 = m.contour(x,y,num,15,linewidths=0.5,colors='k')
+#CS2 = m.contourf(x,y,num,cmap=plt.cm.jet,extend='both')
 
 m.drawcoastlines()
 
