@@ -12,7 +12,7 @@ from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as n
-mpl.rcParams['font.size'] = 6.5
+mpl.rcParams['font.size'] = 5.5
 
 
 ###########################################################################################################################
