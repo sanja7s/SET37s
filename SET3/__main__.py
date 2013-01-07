@@ -11,11 +11,18 @@ import logging
 import numpy as n
 import traceback
 
+######################################################
+## save usr homes data to files
+######################################################
+#from read_in import home_data as rd
+#from analyze.by_night_home import save_usr_home as a
+######################################################
+
 #####################################################
-# save usr homes data to files
+# save usr number of calls and fq data to files
 #####################################################
-from read_in import data as rd
-from analyze.by_night_home import save_usr_home as a
+from read_in import fq_data as rd
+from analyze.by_calling_fq import save_usr_fq as a
 #####################################################
 
 
@@ -41,6 +48,13 @@ def main():
         try:
             # THIS THE FUNCTION YOU ARE TESTING
             
+#            #####################################################
+#            # save usr homes data to files
+#            #####################################################
+#            a.data_to_files(data)
+#            #a.data_to_files(data, True)
+#            #####################################################
+
             #####################################################
             # save usr homes data to files
             #####################################################
