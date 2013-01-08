@@ -72,4 +72,24 @@ def data_to_files(data, total = True):
         if str(i) not in subpref_home.iterkeys():
             print i
             
+#    fileout2 = 'Subprefs_and_their_users.tsv'
+    f2 = open(fileout2, 'r')
+    
+    fileout3 = 'Num_of_users_per_home_subpref.tsv'
+    f3 = open(fileout3, 'w')
+    
+    check_num_users = 0
+    
+    for line in f2:
+        line_elems = line.split('\t')
+        subpref = line_elems[0]
+        f3.write(subpref + '\t' + str(len(line_elems) - 1) + '\n')
+        check_num_users += len(line_elems) - 1
+        
+    f2.close() 
+    f3.close()     
+    print check_num_users
+            
     return
+
+#data_to_files(None)
