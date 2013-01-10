@@ -18,11 +18,18 @@ import traceback
 #from analyze.by_night_home import save_usr_home as a
 ######################################################
 
+######################################################
+## save usr number of calls and fq data to files
+######################################################
+#from read_in import fq_data as rd
+#from analyze.by_calling_fq import save_usr_fq as a
+######################################################
+
 #####################################################
-# save usr number of calls and fq data to files
+# save usr interevent call and fq data to files
 #####################################################
-from read_in import fq_data as rd
-from analyze.by_calling_fq import save_usr_fq as a
+from read_in import interevent_call_times_data as rd
+from analyze.by_interevent_call_times import save_interevent_call_times as a
 #####################################################
 
 
@@ -31,9 +38,25 @@ _log = logging.getLogger(__name__)
 def main():
 
     logging.basicConfig(level=logging.INFO, format='%(name)s: %(levelname)-8s %(message)s')
-    
+
+################################################################    
+#    # this is general function call
+################################################################
+#    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+#    data = defaultdict(int)
+#    for c in C:
+#        data = rd.read_in_file(c, data)
+#        #data = rd.read_in_whole_file(c, data)
+
+###############################################################
+    # this is specific for interevent time calls data
+##############################################################
     C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    #C = ['A']
     data = defaultdict(int)
+    for i in range(500001):
+        data[i] = {'last_call_time': 0, 'interevent_times': defaultdict(int)}
+
     for c in C:
         data = rd.read_in_file(c, data)
         #data = rd.read_in_whole_file(c, data)
