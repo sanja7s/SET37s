@@ -50,3 +50,34 @@ def read_in_file(c, interval):
     return interval
 
 
+def read_in_single_usr(c, interval, usr_chosen, start):
+    
+    i = 0
+    
+    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
+    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    f_path = join(D4D_path_SET3,file_name)
+    #f_path = "/home/sscepano/DATA SET7S/D4D/testing files/test.txt"
+    if isfile(f_path) and file_name != '.DS_Store':
+            file7s = open(f_path, 'r')
+            for line in file7s:
+                usr, call_time, subpref = line.split('\t')
+                usr = int(usr)
+                if usr == usr_chosen:
+                    dt = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')    
+                    #print dt
+                    if len(interval) == 0:
+                        start = dt
+                        interval[start] = 0
+                    else:
+                        i = i + 1
+                        end = dt
+                        delt = end - start
+                        delt = delt.days * 24 * 60 + delt.seconds / 60
+                        #print delt
+                        interval[end] = delt
+                        start = end
+                        
+    print i
+    #print interval                    
+    return interval, start

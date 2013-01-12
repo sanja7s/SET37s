@@ -51,15 +51,31 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    #C = ['A']
+    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    C = ['C']
+    
+#    ##########################################################
+#    # for all interevent times
+#    ###########################################################  
+#    data = defaultdict(int)
+#    for i in range(500001):
+#        data[i] = {'last_call_time': 0, 'interevent_times': defaultdict(int)}
+#      
+#    for c in C:
+#        data = rd.read_in_file(c, data)
+#        #data = rd.read_in_whole_file(c, data)
+
+    #######################################################################
+    # this is list of users you want to analyze -- uncomment for single usr
+    #######################################################################
     data = defaultdict(int)
-    for i in range(500001):
-        data[i] = {'last_call_time': 0, 'interevent_times': defaultdict(int)}
+    usr = 11777
+    start = 0
 
     for c in C:
-        data = rd.read_in_file(c, data)
-        #data = rd.read_in_whole_file(c, data)
+        # this is for single user
+        data, start = rd.read_in_single_usr(c, data, usr, start)
+    #print data
     
     _log.info("Data loaded.")
     while True:
@@ -78,10 +94,16 @@ def main():
 #            #a.data_to_files(data, True)
 #            #####################################################
 
+#            #####################################################
+#            # save usr homes data to files
+#            #####################################################
+#            a.data_to_files(data)
+#            #a.data_to_files(data, True)
+#            #####################################################
             #####################################################
-            # save usr homes data to files
+            # save single usr homes data to files
             #####################################################
-            a.data_to_files(data)
+            a.single_usr_data_to_files(data, usr)
             #a.data_to_files(data, True)
             #####################################################
             

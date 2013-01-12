@@ -79,3 +79,16 @@ def data_to_files(interval):
     
     return
 
+
+def single_usr_data_to_files(interval, usr):
+    
+    ########################################################################################################  
+    # save SINGLE USER statistics for all users
+    ########################################################################################################
+    file_name = "/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/Single_user_date_intervals_" + str(usr) + ".tsv"
+    f = open(file_name,"w")
+    
+    for date7s in interval.iterkeys():
+        f.write(str(date7s) + '\t' + str(interval[date7s]) + '\n')
+    
+    return
