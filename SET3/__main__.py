@@ -33,11 +33,18 @@ import networkx as nx
 #from analyze.by_interevent_call_times import save_interevent_call_times as a
 ######################################################
 
+######################################################
+## save fq data to NX graph
+######################################################
+#from read_in import fq_data as rd
+#from analyze.by_calling_fq import save_graph_data as a
+#######################################################
+
 #####################################################
-# save fq data to NX graph
+# plot user movements to map
 #####################################################
 from read_in import fq_data as rd
-from analyze.by_calling_fq import save_graph_data as a
+from visualize.by_calling_fq import map_usr_movements as a
 #####################################################
 
 
@@ -123,7 +130,7 @@ def main():
             #####################################################
             # save single usr homes data to files
             #####################################################
-            a.graph2_file(data, c, usr)
+            a.plot_movements(data, c)
             #a.data_to_files(data, True)
             #####################################################
             
