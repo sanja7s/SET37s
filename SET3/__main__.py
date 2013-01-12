@@ -69,7 +69,7 @@ def main():
     # this is list of users you want to analyze -- uncomment for single usr
     #######################################################################
     data = defaultdict(int)
-    usr = 11777
+    usr = 248907
     start = 0
 
     for c in C:

@@ -178,6 +178,8 @@ def from_file_interevents(file_name, usr):
 
 def from_file_interevents_2weeks(file_name, usr):
     
+    file_name = file_name + str(usr) + "C.tsv"
+    
     date7s = []
     interevents = []
     
@@ -245,14 +247,16 @@ def from_file_interevents_2weeks(file_name, usr):
     setp( gca().get_xticklabels(), rotation=45, horizontalalignment='right')
     
     #show()
-    figure_name = "/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/A/usr_" + str(usr) + ".png"
+    # figure_name = "/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/A/usr_" + str(usr) + ".png"
+    figure_name = "/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/C/usr_" + str(usr) + ".png"
       
     print(figure_name)
     plt.savefig(figure_name, format = "png")    
     
     return
 
-from_file_interevents_2weeks("/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/A/Single_user_date_intervals_148907A.tsv", 148907)
+usr = 248907
+from_file_interevents_2weeks("/home/sscepano/D4D res/allstuff/SET3 intervals from python/1/single usr stats/C/Single_user_date_intervals_", usr)
 
 
 
