@@ -10,6 +10,7 @@ from multiprocessing import Pool
 import logging
 import numpy as n
 import traceback
+import networkx as nx
 
 ######################################################
 ## save usr homes data to files
@@ -25,11 +26,18 @@ import traceback
 #from analyze.by_calling_fq import save_usr_fq as a
 ######################################################
 
+######################################################
+## save usr interevent call and fq data to files
+######################################################
+#from read_in import interevent_call_times_data as rd
+#from analyze.by_interevent_call_times import save_interevent_call_times as a
+######################################################
+
 #####################################################
-# save usr interevent call and fq data to files
+# save fq data to NX graph
 #####################################################
-from read_in import interevent_call_times_data as rd
-from analyze.by_interevent_call_times import save_interevent_call_times as a
+from read_in import fq_data as rd
+from analyze.by_calling_fq import save_graph_data as a
 #####################################################
 
 
@@ -52,7 +60,7 @@ def main():
     # this is specific for interevent time calls data
 ##############################################################
     #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    C = ['C']
+    C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -65,16 +73,28 @@ def main():
 #        data = rd.read_in_file(c, data)
 #        #data = rd.read_in_whole_file(c, data)
 
+#    #######################################################################
+#    # this is list of users you want to analyze -- uncomment for single usr
+#    #######################################################################
+#    data = defaultdict(int)
+#    usr = 248907
+#    start = 0
+#
+#    for c in C:
+#        # this is for single user
+#        data, start = rd.read_in_single_usr(c, data, usr, start)
+#    #print data
+
     #######################################################################
-    # this is list of users you want to analyze -- uncomment for single usr
+    # this is for NX graph for a SINGLE user movements
     #######################################################################
-    data = defaultdict(int)
-    usr = 248907
-    start = 0
+    data = nx.DiGraph()
+    #data = rd.read_in_subprefs()
+    usr = 777
 
     for c in C:
         # this is for single user
-        data, start = rd.read_in_single_usr(c, data, usr, start)
+        data = rd.read_in_file_2graph(c, data, usr)
     #print data
     
     _log.info("Data loaded.")
@@ -103,7 +123,7 @@ def main():
             #####################################################
             # save single usr homes data to files
             #####################################################
-            a.single_usr_data_to_files(data, usr)
+            a.graph2_file(data, c, usr)
             #a.data_to_files(data, True)
             #####################################################
             
