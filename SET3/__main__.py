@@ -50,6 +50,7 @@ import networkx as nx
 #####################################################
 from read_in import fq_data as rd
 from visualize.by_calling_fq import map_usr_movements as a
+from analyze.by_calling_fq import save_graph_data as s
 #####################################################
 
 
@@ -71,8 +72,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    C = ['A']
+    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    #C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -124,12 +125,19 @@ def main():
     # this is to analyze commuting or returning patterns during one day for a single user
     #######################################################################
     data = nx.DiGraph()
-    usr = 2
+    usr = 1177
     
     for c in C:
         # this is for single user
         data = rd.read_in_commuting_patterns(c, data, usr)
     #print data
+    
+    ####################################################
+    # this is for analyzing commuting patterns
+    ####################################################
+    a.plot_commuting_patterns(data, usr)
+    s.graph2_file2(data, usr)
+    ####################################################
 
     _log.info("Data loaded.")
     while True:
@@ -160,13 +168,13 @@ def main():
             #a.plot_movements(data, subpref)
             #a.data_to_files(data, True)
             #####################################################
-#            print 'OVER'
-            ####################################################
-            # this is for analyzing commuting patterns
-            ####################################################
-            a.plot_commuting_patterns(data, usr)
-            #a.data_to_files(data, True)
-            ####################################################
+            print 'OVER'
+#            ####################################################
+#            # this is for analyzing commuting patterns
+#            ####################################################
+#            a.plot_commuting_patterns(data, usr)
+#            s.graph2_file2(data, usr)
+#            ####################################################
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))

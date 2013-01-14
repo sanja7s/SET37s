@@ -67,6 +67,21 @@ def read_in_subpref_users(subpref):
         
     return usrs_list
 
+def read_in_user_home_subprefs():
+
+    D4DPath = "/home/sscepano/D4D res/ORGANIZED/SET3/Night Homes"
+    file7s = "Users_and_their_homes.tsv"
+    f = open(join(D4DPath,file7s), 'r')
+    
+    usrs_subprefs = defaultdict(int)
+    
+    for line in f:
+        usr, subpref = line.split('\t')
+        usr = int(usr)
+        subpref = int(subpref)
+        usrs_subprefs[usr] = subpref
+      
+    return usrs_subprefs
 
 def read_in_file_2graph(c, G, usr_chosen):
     
@@ -133,11 +148,15 @@ def read_in_file_2graph_multiple_users(c, G, usrs_list, last_usr_loc):
 
 def read_in_commuting_patterns(c, G, usr_chosen):
     
-    i = 0
+    count_total_daily_patterns = 0
     usr_loc_today = defaultdict(int)
     usr_loc_today[usr_chosen] = []
     current_day = date.today() 
     found_chosen = False
+    
+    usr_home_subprefs = read_in_user_home_subprefs()
+    usr_home = usr_home_subprefs[usr_chosen]
+    count_home_matches = 0
     
     D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
     file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
@@ -165,6 +184,9 @@ def read_in_commuting_patterns(c, G, usr_chosen):
                                 for i in range(end-2):
                                     if last_loc == usr_loc_today[usr][i]:
                                         found_pattern = True
+                                        count_total_daily_patterns += 1
+                                        if last_loc == usr_home:
+                                            count_home_matches += 1
                                         k = 0
                                         while k < end-1:
                                             first_subpref = usr_loc_today[usr][k]
@@ -186,6 +208,8 @@ def read_in_commuting_patterns(c, G, usr_chosen):
                                 usr_loc_today[usr].append(subpref)
                 else:
                     if found_chosen == True:
+                        print ("Total patterns found ", count_total_daily_patterns)
+                        print ("Home matches found ", count_home_matches)
                         return G   
                         
                     

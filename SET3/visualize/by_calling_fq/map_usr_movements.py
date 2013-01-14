@@ -279,7 +279,7 @@ def plot_commuting_patterns(G, usr):
 ##
 #############################################
 
-    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/A/users/non-scaled/usr_commuting_" + usr_str + ".png" 
+    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/ALL/users/non-scaled/usr_commuting_" + usr_str + ".png" 
     print(figure_name)
     plt.savefig(figure_name, format = "png")  
     
@@ -314,7 +314,7 @@ def plot_commuting_patterns(G, usr):
         linewidth7s = linewidth7s + 0.17
         m.plot(x,y, linewidth= linewidth7s)
         
-    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/A/users/scaled/usr_commuting_" + usr_str + ".png" 
+    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/ALL/users/scaled/usr_commuting_" + usr_str + ".png" 
     print(figure_name)
     plt.savefig(figure_name, format = "png")  
      
