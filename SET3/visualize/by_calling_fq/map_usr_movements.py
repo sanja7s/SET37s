@@ -11,8 +11,11 @@ mpl.rcParams['font.size'] = 5.5
 import networkx as nx
 import matplotlib.colors as colors
 import matplotlib.cm as cm
+from math import log
 
-def plot_movements(G, c):
+def plot_movements(G, subpref):
+    
+    subpref_str =  str(subpref)
     
     m = Basemap(llcrnrlon=-9, \
                     llcrnrlat=3.8, \
@@ -27,8 +30,7 @@ def plot_movements(G, c):
     s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
     
     m.drawcoastlines()
-    #m.fillcontinents()
-    
+
     # data to plot on the map    
     lons = [int]*256
     lats = [int]*256
@@ -51,53 +53,117 @@ def plot_movements(G, c):
     f2.close()
     
     # if wanna plot number of users whose this is home subpref
-    for subpref in range(1,255):
+    for subpref in range(1,256):
         lons[subpref] = subpref_coord[subpref][0]
         lats[subpref] = subpref_coord[subpref][1]
     
-#    pos=nx.spring_layout(G) 
-#    nx.draw(G, pos)
-#    edge_labels=dict([((u,v,),d['weight'])
-#        for u,v,d in G.edges(data=True)])
     
     if G.has_node(-1): 
         G.remove_node(-1)
-    pos = {}
-    
+
     max = 1
+    min = 1
     for u,v,d in G.edges(data=True):
         if d['weight'] > max:
             max = d['weight']
+        if d['weight'] < min:
+            min = d['weight']
             
-    max = float(max)
+    max7s = float(max)
+    print max7s
+    print min
         
-    edge_width=[]
-    for u,v,d in G.edges(data=True):
-        edge_width.append(d['weight']/max)
+#    edge_width=[]
+#    for u,v,d in G.edges(data=True):
+#        edge_width.append(d['weight'])
+        #print d['weight']
     
 #    pos=dict([((n,),m(lons[n], lats[n]))
 #        for n in G.nodes()])
 #   
-
      
-    for node in G.nodes():
-        print node
-        x, y = m(lons[node], lats[node])
-        pos.keys().append(node)
-        pos[node] = (x, y)
+#    for node in G.nodes():
+#        #print node
+#        x, y = m(lons[node], lats[node])
+#        pos.keys().append(node)
+#        pos[node] = (x, y)
     
+ 
+    for u, v, d in G.edges(data=True):
+        lo = []
+        la = []   
+        lo.append(lons[u])
+        lo.append(lons[v])
+        la.append(lats[u])
+        la.append(lats[v])
+        x, y = m(lo, la)
+        linewidth7s = d['weight'] / max7s
+        linewidth7s = linewidth7s * 700
+        m.plot(x,y, linewidth= linewidth7s)
         
-    cmap=cm.get_cmap()
-    
-    #nx.draw_networkx_nodes(G, pos,  node_color='w', node_size=55,alpha=0.3, linewidths = 0.000001 ) 
-    nx.draw_networkx_labels(G, pos,  font_size=7,alpha=0.7 )    
-    nx.draw_networkx_edges(G, pos, arrows=False, alpha = 0.7, edge_vmin = 0, edge_vmax = 1, edge_color = edge_width, edge_cmap = cmap)
-    #nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=7.5, font_color = 'r')
-    
-    #plt.show()
-    
-    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/" + c + "/png/subpref_usr_movements_" + c + ".png" 
+#############################################  
+##    lo = []
+##    la = []   
+##    lo.append(lons[7])
+##    lo.append(lons[11])
+##    la.append(lats[7])
+##    la.append(lats[11])
+##    x, y = m(lo, la)  
+##    m.plot(x,y, linewidth= 0.3)
+#        
+#    #cmap=cm.get_cmap('gist_rainbow',256)
+#    #cmap = plt.cm.Blues
+#    
+#    #nx.draw_networkx_nodes(G, pos,  node_color='w', node_size=55,alpha=0.3, linewidths = 0.000001 ) 
+#    #nx.draw_networkx_labels(G, pos,  font_size=7,alpha=0.7 )    
+#    #nx.draw_networkx_edges(G, pos, arrows=False, edge_vmin = min, edge_vmax = max, edge_color = edge_width, edge_cmap = cmap)
+#    #nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=7.5, font_color = 'r')
+#    #nx.draw(G, pos, edge_color = edge_width, edge_cmap = cmap)
+#    
+#    #plt.show()
+##
+#############################################
+
+    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/ALL/non_scaled_subprefs/subpref_usr_movements_vPYP" + subpref_str + ".png" 
     print(figure_name)
-    plt.savefig(figure_name, format = "png")    
+    plt.savefig(figure_name, format = "png")  
+    
+#    print G.number_of_nodes()  
+#    print G.number_of_edges()  
+    
+    plt.clf()
+    
+    m = Basemap(llcrnrlon=-9, \
+                    llcrnrlat=3.8, \
+                    urcrnrlon=-1.5, \
+                    urcrnrlat = 11, \
+                    resolution = 'h', \
+                    projection = 'tmerc', \
+                    lat_0 = 7.38, \
+                    lon_0 = -5.30)
+   
+    # read the shapefile archive
+    s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
+    
+    m.drawcoastlines()
+    
+    for u, v, d in G.edges(data=True):
+        lo = []
+        la = []   
+        lo.append(lons[u])
+        lo.append(lons[v])
+        la.append(lats[u])
+        la.append(lats[v])
+        x, y = m(lo, la)
+        linewidth7s = d['weight'] / max7s
+        linewidth7s = linewidth7s *70 + 0.17
+        m.plot(x,y, linewidth= linewidth7s)
+        
+    figure_name = "//home/sscepano/D4D res/allstuff/User movements graphs/ALL/scaled_subprefs/subpref_usr_movements_vPYP_SCALED" + subpref_str + ".png" 
+    print(figure_name)
+    plt.savefig(figure_name, format = "png")  
      
     return
+
+
+#plot_movements(2)

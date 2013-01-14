@@ -66,8 +66,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    C = ['A']
+    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    #C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -97,13 +97,16 @@ def main():
     #######################################################################
     data = nx.DiGraph()
     #data = rd.read_in_subprefs()
-    usr = 777
+    for subpref in range(1,256):
+        usrs_list = rd.read_in_subpref_users(subpref)
+        last_usr_loc = defaultdict(int)
+        for usr in usrs_list:
+            last_usr_loc[usr] = 0
+            for c in C:
+                # this is for single subpref
+                data = rd.read_in_file_2graph_multiple_users(c, data, usrs_list, last_usr_loc)
+    a.plot_movements(data, subpref)
 
-    for c in C:
-        # this is for single user
-        data = rd.read_in_file_2graph(c, data, usr)
-    #print data
-    
     _log.info("Data loaded.")
     while True:
         raw_input("Press enter to start a process cycle:\n")
@@ -130,9 +133,10 @@ def main():
             #####################################################
             # save single usr homes data to files
             #####################################################
-            a.plot_movements(data, c)
+            #a.plot_movements(data, subpref)
             #a.data_to_files(data, True)
             #####################################################
+            print 'OVER'
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))
