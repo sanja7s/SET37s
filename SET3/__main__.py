@@ -93,19 +93,27 @@ def main():
 #    #print data
 
     #######################################################################
-    # this is for NX graph for a SINGLE user movements
+    # this is for NX graph for a SUBPREF overall user movements
     #######################################################################
-    data = nx.DiGraph()
-    #data = rd.read_in_subprefs()
+    # here we read in dictionary of users into usrs_list, so that we only read for them from the files.
     for subpref in range(1,256):
+        data = nx.DiGraph()
+        usrs_list = defaultdict(int)
         usrs_list = rd.read_in_subpref_users(subpref)
+        print "Read users " + str(subpref)
+        # this we need to follow properly each user, for his next locations (afterall he had to move somehow from last calling loc to the next)
+        # CAUTION  for LATER WORK: here is that probably later I should limit this to some shorter time between calls,
+        # otherwise he could have really moved in some other unknown routes
+        # even more appealing -- we want to know daily commute patterns from home. This might confirm my HOMES found to be correct :)
         last_usr_loc = defaultdict(int)
         for usr in usrs_list:
             last_usr_loc[usr] = 0
-            for c in C:
-                # this is for single subpref
-                data = rd.read_in_file_2graph_multiple_users(c, data, usrs_list, last_usr_loc)
-    a.plot_movements(data, subpref)
+        for c in C:
+            # this is for single subpref, through all 10 weeks
+            data = rd.read_in_file_2graph_multiple_users(c, data, usrs_list, last_usr_loc)
+        # plot summary movements for all users
+        a.plot_movements(data, subpref)
+        print "Done " + str(subpref)
 
     _log.info("Data loaded.")
     while True:
