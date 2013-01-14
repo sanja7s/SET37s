@@ -6,6 +6,7 @@ Created on Jan 7, 2013
 from os.path import isfile, join
 from collections import defaultdict
 import networkx as nx
+from datetime import datetime
 
 # we take in user calls on weekdays between 7pm and 5am as being from HOME and count number of such calls
 # for each user plus the number of calls on the weekends in general
@@ -127,3 +128,25 @@ def read_in_file_2graph_multiple_users(c, G, usrs_list, last_usr_loc):
     
     print i            
     return G
+
+
+
+def read_in_commuting_patterns(c, G, usr_chosen, last_usr_loc):
+    
+    i = 0
+    
+    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
+    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    f_path = join(D4D_path_SET3,file_name)
+    if isfile(f_path) and file_name != '.DS_Store':
+            file7s = open(f_path, 'r')
+            for line in file7s:
+                usr, call_time, subpref = line.split('\t')
+                usr = int(usr)
+                if usr == usr_chosen:
+                    if last_usr_loc[usr] == 0:
+                        last_usr_loc[usr] = subpref
+                        continue
+                    subpref = int(subpref)
+                    call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
+                    
