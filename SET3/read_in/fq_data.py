@@ -6,7 +6,7 @@ Created on Jan 7, 2013
 from os.path import isfile, join
 from collections import defaultdict
 import networkx as nx
-from datetime import datetime
+from datetime import datetime, date
 
 # we take in user calls on weekdays between 7pm and 5am as being from HOME and count number of such calls
 # for each user plus the number of calls on the weekends in general
@@ -131,9 +131,13 @@ def read_in_file_2graph_multiple_users(c, G, usrs_list, last_usr_loc):
 
 
 
-def read_in_commuting_patterns(c, G, usr_chosen, last_usr_loc):
+def read_in_commuting_patterns(c, G, usr_chosen):
     
     i = 0
+    usr_loc_today = defaultdict(int)
+    usr_loc_today[usr_chosen] = []
+    current_day = date.today() 
+    found_chosen = False
     
     D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
     file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
@@ -144,9 +148,46 @@ def read_in_commuting_patterns(c, G, usr_chosen, last_usr_loc):
                 usr, call_time, subpref = line.split('\t')
                 usr = int(usr)
                 if usr == usr_chosen:
-                    if last_usr_loc[usr] == 0:
-                        last_usr_loc[usr] = subpref
-                        continue
-                    subpref = int(subpref)
+                    found_chosen = True
                     call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
+                    subpref = int(subpref)
+                    # if we are just starting
+                    if current_day == date.today():
+                        current_day = call_time.date()
+                        usr_loc_today[usr] = [subpref]
+                    else:
+                        # if read in a different day from the one so far, lets finish it with the previous one
+                        if current_day <> call_time.date():
+                            e = len(usr_loc_today[usr])
+                            found_pattern = False
+                            for end in range(e-1, 1, -1):
+                                last_loc = usr_loc_today[usr][end]
+                                for i in range(end-2):
+                                    if last_loc == usr_loc_today[usr][i]:
+                                        found_pattern = True
+                                        k = 0
+                                        while k < end-1:
+                                            first_subpref = usr_loc_today[usr][k]
+                                            second_subpref = usr_loc_today[usr][k+1]
+                                            if G.has_edge(first_subpref, second_subpref):
+                                                G[first_subpref][second_subpref]['weight'] += 1
+                                            else:
+                                                G.add_edge(first_subpref, second_subpref, weight = 1)
+                                            print 'check'
+                                            k += 1
+                                        break
+                                if found_pattern:
+                                    break
+                            usr_loc_today[usr] = [subpref]
+                            current_day = call_time.date()
+                        else:
+                            last_index =len(usr_loc_today[usr])-1
+                            if usr_loc_today[usr][last_index] <> subpref:
+                                usr_loc_today[usr].append(subpref)
+                else:
+                    if found_chosen == True:
+                        return G   
+                        
+                    
+                    
                     

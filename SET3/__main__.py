@@ -71,8 +71,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    #C = ['A']
+    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -97,28 +97,39 @@ def main():
 #        data, start = rd.read_in_single_usr(c, data, usr, start)
 #    #print data
 
+#    #######################################################################
+#    # this is for NX graph for a SUBPREF overall user movements
+#    #######################################################################
+#    # here we read in dictionary of users into usrs_list, so that we only read for them from the files.
+#    for subpref in range(1,256):
+#        data = nx.DiGraph()
+#        usrs_list = defaultdict(int)
+#        usrs_list = rd.read_in_subpref_users(subpref)
+#        print "Read users " + str(subpref)
+#        # this we need to follow properly each user, for his next locations (afterall he had to move somehow from last calling loc to the next)
+#        # CAUTION  for LATER WORK: here is that probably later I should limit this to some shorter time between calls,
+#        # otherwise he could have really moved in some other unknown routes
+#        # even more appealing -- we want to know daily commute patterns from home. This might confirm my HOMES found to be correct :)
+#        last_usr_loc = defaultdict(int)
+#        for usr in usrs_list:
+#            last_usr_loc[usr] = 0
+#        for c in C:
+#            # this is for single subpref, through all 10 weeks
+#            data = rd.read_in_file_2graph_multiple_users(c, data, usrs_list, last_usr_loc)
+#        # plot summary movements for all users
+#        a.plot_movements(data, subpref)
+#        print "Done " + str(subpref)
+
     #######################################################################
-    # this is for NX graph for a SUBPREF overall user movements
+    # this is to analyze commuting or returning patterns during one day for a single user
     #######################################################################
-    # here we read in dictionary of users into usrs_list, so that we only read for them from the files.
-    for subpref in range(1,256):
-        data = nx.DiGraph()
-        usrs_list = defaultdict(int)
-        usrs_list = rd.read_in_subpref_users(subpref)
-        print "Read users " + str(subpref)
-        # this we need to follow properly each user, for his next locations (afterall he had to move somehow from last calling loc to the next)
-        # CAUTION  for LATER WORK: here is that probably later I should limit this to some shorter time between calls,
-        # otherwise he could have really moved in some other unknown routes
-        # even more appealing -- we want to know daily commute patterns from home. This might confirm my HOMES found to be correct :)
-        last_usr_loc = defaultdict(int)
-        for usr in usrs_list:
-            last_usr_loc[usr] = 0
-        for c in C:
-            # this is for single subpref, through all 10 weeks
-            data = rd.read_in_file_2graph_multiple_users(c, data, usrs_list, last_usr_loc)
-        # plot summary movements for all users
-        a.plot_movements(data, subpref)
-        print "Done " + str(subpref)
+    data = nx.DiGraph()
+    usr = 2
+    
+    for c in C:
+        # this is for single user
+        data = rd.read_in_commuting_patterns(c, data, usr)
+    #print data
 
     _log.info("Data loaded.")
     while True:
@@ -149,7 +160,13 @@ def main():
             #a.plot_movements(data, subpref)
             #a.data_to_files(data, True)
             #####################################################
-            print 'OVER'
+#            print 'OVER'
+            ####################################################
+            # this is for analyzing commuting patterns
+            ####################################################
+            a.plot_commuting_patterns(data, usr)
+            #a.data_to_files(data, True)
+            ####################################################
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))
