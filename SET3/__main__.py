@@ -121,23 +121,44 @@ def main():
 #        a.plot_movements(data, subpref)
 #        print "Done " + str(subpref)
 
-    #######################################################################
-    # this is to analyze commuting or returning patterns during one day for a single user
-    #######################################################################
-    data = nx.DiGraph()
-    usr = 1177
+#    #######################################################################
+#    # this is to analyze commuting or returning patterns during one day for a single user
+#    #######################################################################
+#    data = nx.DiGraph()
+#    usr = 1177
+#    
+#    for c in C:
+#        # this is for single user
+#        data = rd.read_in_commuting_patterns(c, data, usr)
+#    #print data
+#    
+#    ####################################################
+#    # this is for analyzing commuting patterns
+#    ####################################################
+#    a.plot_commuting_patterns(data, usr)
+#    s.graph2_file2(data, usr)
+    ####################################################
     
-    for c in C:
-        # this is for single user
-        data = rd.read_in_commuting_patterns(c, data, usr)
-    #print data
     
-    ####################################################
-    # this is for analyzing commuting patterns
-    ####################################################
-    a.plot_commuting_patterns(data, usr)
-    s.graph2_file2(data, usr)
-    ####################################################
+    #######################################################################
+    # this is to analyze commuting or returning patterns during one day for a whole set of subpref users user
+    #######################################################################
+    for subpref in range(1,256):
+        data = nx.DiGraph()
+        #subpref = 200
+        usrs_list = rd.read_in_subpref_users(subpref)
+        print len(usrs_list)
+    
+        for c in C:
+            # this is for single user
+            usrs_list = rd.read_in_subpref_users(subpref)
+            data = rd.read_in_commuting_patterns_multiple_users(c, data, usrs_list)
+    
+        ####################################################
+        # this is for analyzing commuting patterns
+        ####################################################
+        a.plot_commuting_patterns(data, subpref, is_subpref=True)
+        s.graph2_file_subpref2(data, subpref)
 
     _log.info("Data loaded.")
     while True:
