@@ -10,9 +10,61 @@ from datetime import datetime, date
 import math
 import numpy as n
 
+## we take in user calls on weekdays between 7pm and 5am as being from HOME and count number of such calls
+## for each user plus the number of calls on the weekends in general
+#def read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj):
+#    
+#    i = 0
+#    usr_home = read_in_user_home_subprefs()
+#    subpref_dist = find_subpref_distance()
+#    subpref_pos_data = read_in_subpref_pos_file()
+#    rg = defaultdict(int)
+#    
+#    
+#    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
+#    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+#    #file_name = '100Klines.txt'
+#    f_path = join(D4D_path_SET3,file_name)
+#    if isfile(f_path) and file_name != '.DS_Store':
+#            file7s = open(f_path, 'r')
+#            for line in file7s:
+#                i = i + 1
+#                usr, call_time, subpref = line.split('\t')
+#                usr = int(usr)
+#                subpref = int(subpref)
+#                if usr_home[usr] == subpref:
+#                    home_calls[usr][0] += 1
+#                else: 
+#                    home_calls[usr][1] += 1
+#                if last_usr_loc_n_dist[usr][0] <> 0:
+#                    if subpref <> last_usr_loc_n_dist[usr][0]:
+#                        last_usr_loc_n_dist[usr][1] += subpref_dist[last_usr_loc_n_dist[usr][0]][subpref]
+#                else:
+#                    last_usr_loc_n_dist[usr][0] = subpref
+#                if center_mass_coord[usr][0] <> 0 and center_mass_coord[usr][1] <> 0:
+#                    L = home_calls[usr][0] + home_calls[usr][1]
+#                    usr_traj[usr][L-1][0] = subpref_pos_data[subpref][0]
+#                    usr_traj[usr][L-1][1] = subpref_pos_data[subpref][1]
+#                    new_cm = find_mid_point(center_mass_coord[usr][0],center_mass_coord[usr][1],subpref_pos_data[subpref][0], subpref_pos_data[subpref][1])
+#                    center_mass_coord[usr][0] = new_cm[0]
+#                    center_mass_coord[usr][1] = new_cm[1]
+#                    radius_gyr = 0
+#                    for i in range(L): 
+#                        d = find_distance(usr_traj[usr][i][0], usr_traj[usr][i][1], center_mass_coord[usr][0], center_mass_coord[usr][1])
+#                        radius_gyr += d*d
+#                    radius_gyr = math.sqrt(radius_gyr / L)
+#                    rg[usr] = radius_gyr  
+#                else:
+#                    center_mass_coord[usr][0] = subpref_pos_data[subpref][0]
+#                    center_mass_coord[usr][1] = subpref_pos_data[subpref][1]
+#    
+#    print i            
+#    return home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, rg
+
+
 # we take in user calls on weekdays between 7pm and 5am as being from HOME and count number of such calls
 # for each user plus the number of calls on the weekends in general
-def read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj):
+def read_in_file(c, home_calls, last_usr_loc_n_dist):
     
     i = 0
     usr_home = read_in_user_home_subprefs()
@@ -41,25 +93,11 @@ def read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj
                         last_usr_loc_n_dist[usr][1] += subpref_dist[last_usr_loc_n_dist[usr][0]][subpref]
                 else:
                     last_usr_loc_n_dist[usr][0] = subpref
-                if center_mass_coord[usr][0] <> 0 and center_mass_coord[usr][1] <> 0:
-                    L = home_calls[usr][0] + home_calls[usr][1]
-                    usr_traj[usr][L-1][0] = subpref_pos_data[subpref][0]
-                    usr_traj[usr][L-1][1] = subpref_pos_data[subpref][1]
-                    new_cm = find_mid_point(center_mass_coord[usr][0],center_mass_coord[usr][1],subpref_pos_data[subpref][0], subpref_pos_data[subpref][1])
-                    center_mass_coord[usr][0] = new_cm[0]
-                    center_mass_coord[usr][1] = new_cm[1]
-                    radius_gyr = 0
-                    for i in range(L): 
-                        d = find_distance(usr_traj[usr][i][0], usr_traj[usr][i][1], center_mass_coord[usr][0], center_mass_coord[usr][1])
-                        radius_gyr += d*d
-                    radius_gyr = math.sqrt(radius_gyr / L)
-                    rg[usr] = radius_gyr  
-                else:
-                    center_mass_coord[usr][0] = subpref_pos_data[subpref][0]
-                    center_mass_coord[usr][1] = subpref_pos_data[subpref][1]
+             
     
     print i            
-    return home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, rg
+    return home_calls, last_usr_loc_n_dist
+
 
 
 def read_in_user_home_subprefs():

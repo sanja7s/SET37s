@@ -80,8 +80,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    C = ['A']
+    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    #C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -189,11 +189,17 @@ def main():
     # here we save last location (helps calculating) and user travelled distance
     last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.int)
     # here we save helping center of mass coordinates, for each user two coordinates
-    center_mass_coord = n.zeros((500001,2))
-    usr_traj = n.zeros((500001,137357,2))
+    #center_mass_coord = n.zeros((256,2))
+    #usr_traj = n.zeros((500001,137357,2))
+    #usr_traj = n.zeros((256,13116,2))
     
+#    for c in C:
+#        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
+
     for c in C:
-        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
+        home_calls, last_usr_loc_n_dist = rd.read_in_file(c, home_calls, last_usr_loc_n_dist)
+
+
 
 
     _log.info("Data loaded.")
@@ -236,7 +242,8 @@ def main():
             ####################################################
             # this is for CLUSTERING algorithms
             ####################################################
-            s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
+            #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
+            s.save_data_to_matrix(home_calls, last_usr_loc_n_dist)
             
             ####################################################
             
