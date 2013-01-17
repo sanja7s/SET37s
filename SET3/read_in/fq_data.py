@@ -144,7 +144,22 @@ def read_in_file_2graph_multiple_users(c, G, usrs_list, last_usr_loc):
     print i            
     return G
 
-
+def read_in_subpref_avg_fq():
+    
+    subpref_avg_fq = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/subpref/Subpref_avg_calling_fq.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, avg_fq = line.split('\t')
+        subpref =  int(subpref)
+        avg_fq = float(avg_fq)
+        subpref_avg_fq[subpref] = avg_fq
+        
+        
+    return subpref_avg_fq
+        
 
 def read_in_commuting_patterns(c, G, usr_chosen):
     
