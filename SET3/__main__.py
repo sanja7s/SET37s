@@ -147,8 +147,6 @@ def main():
 # s.graph2_file2(data, usr)
     ####################################################
     
-    
-<<<<<<< HEAD
 # #######################################################################
 # # this is to analyze commuting or returning patterns during one day for a whole set of subpref users user
 # #######################################################################
@@ -180,7 +178,6 @@ def main():
 # # this is for single user
 # data = rd.read_in_commuting_patterns(c, data, usr)
 # #print data
-=======
 #    #######################################################################
 #    # this is to analyze commuting or returning patterns during one day for a whole set of subpref users user
 #    #######################################################################
@@ -212,7 +209,7 @@ def main():
 #        # this is for single user
 #        data = rd.read_in_commuting_patterns(c, data, usr)
 #    #print data
->>>>>>> 1431ec6ed3ca345f85763e524129e7c8b1d187da
+
 
 
     #######################################################################
@@ -227,13 +224,13 @@ def main():
     #usr_traj = n.zeros((500001,137357,2))
     #usr_traj = n.zeros((256,13116,2))
     
-<<<<<<< HEAD
+
 # for c in C:
 # home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
-=======
+
 #    for c in C:
 #        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
->>>>>>> 1431ec6ed3ca345f85763e524129e7c8b1d187da
+
 
     for c in C:
         home_calls, last_usr_loc_n_dist = rd.read_in_file(c, home_calls, last_usr_loc_n_dist)
@@ -270,7 +267,7 @@ def main():
             #a.plot_movements(data, subpref)
             #a.data_to_files(data, True)
             #####################################################
-<<<<<<< HEAD
+
 # print 'OVER'
 ## ####################################################
 ## # this is for analyzing commuting patterns
@@ -278,7 +275,7 @@ def main():
 ## a.plot_commuting_patterns(data, usr)
 ## s.graph2_file2(data, usr)
 ## ####################################################
-=======
+
 #            print 'OVER'
 ##            ####################################################
 ##            # this is for analyzing commuting patterns
@@ -286,7 +283,7 @@ def main():
 ##            a.plot_commuting_patterns(data, usr)
 ##            s.graph2_file2(data, usr)
 ##            ####################################################
->>>>>>> 1431ec6ed3ca345f85763e524129e7c8b1d187da
+
 
             ####################################################
             # this is for CLUSTERING algorithms
