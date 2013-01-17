@@ -53,12 +53,20 @@ import networkx as nx
 #from analyze.by_calling_fq import save_graph_data as s
 ######################################################
 
+######################################################
+## for CLUSTERING data
+######################################################
+#from read_in import clustering_arguments as rd
+##from visualize.by_calling_fq import map_usr_movements as a
+#from analyze.by_calling_fq import save_clustering_args as s
+######################################################
+
 #####################################################
-# for CLUSTERING data
+# for num visited subpref data
 #####################################################
-from read_in import clustering_arguments as rd
+from read_in import num_visited_subpref_data as rd
 #from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_calling_fq import save_clustering_args as s
+from analyze.by_num_visited_subprefs import save_num_visited_subprefs as s
 #####################################################
 
 
@@ -212,30 +220,32 @@ def main():
 
 
 
-    #######################################################################
-    # this is for finding CLUSTERING arguments we want
-    #######################################################################
-    # here we save number of calls made from home and number of calls made outside of home subpref for each user
-    home_calls = n.zeros((500001,2), dtype=n.int)
-    # here we save last location (helps calculating) and user travelled distance
-    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.int)
-    # here we save helping center of mass coordinates, for each user two coordinates
-    #center_mass_coord = n.zeros((256,2))
-    #usr_traj = n.zeros((500001,137357,2))
-    #usr_traj = n.zeros((256,13116,2))
-    
-
-# for c in C:
-# home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
-
+#    #######################################################################
+#    # this is for finding CLUSTERING arguments we want
+#    #######################################################################
+#    # here we save number of calls made from home and number of calls made outside of home subpref for each user
+#    home_calls = n.zeros((500001,2), dtype=n.int)
+#    # here we save last location (helps calculating) and user travelled distance
+#    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.int)
+#    # here we save helping center of mass coordinates, for each user two coordinates
+#    #center_mass_coord = n.zeros((256,2))
+#    #usr_traj = n.zeros((500001,137357,2))
+#    #usr_traj = n.zeros((256,13116,2))
+#    
+#
+## for c in C:
+## home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
+#
+##    for c in C:
+##        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
+#
+#
 #    for c in C:
-#        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
-
+#        home_calls, last_usr_loc_n_dist = rd.read_in_file(c, home_calls, last_usr_loc_n_dist)
+    data = n.zeros((500001,256),dtype=n.int)
 
     for c in C:
-        home_calls, last_usr_loc_n_dist = rd.read_in_file(c, home_calls, last_usr_loc_n_dist)
-
-
+        data = rd.read_in_file(c, data)
 
 
     _log.info("Data loaded.")
@@ -289,7 +299,7 @@ def main():
             # this is for CLUSTERING algorithms
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save_data_to_matrix(home_calls, last_usr_loc_n_dist)
+            s.data_to_files(data)
             
             ####################################################
             

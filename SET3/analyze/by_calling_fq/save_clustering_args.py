@@ -30,13 +30,14 @@ def save_data_to_matrix(home_calls, last_usr_loc_n_dist):
     
     usr_home = rd.read_in_user_home_subprefs()
     subpref_avg_fq = rd.read_in_subpref_avg_fq()
+    subpref_num_usr = rd.read_in_subpref_num_users()
     
     subpref_calls = defaultdict(int)
     subpref_outside_calls = defaultdict(int)
     subpref_pct_inside_calls = defaultdict(int)
     subpref_total_traj = defaultdict(int)
     
-    file_o = "/home/sscepano/D4D res/allstuff/CLUSTERING/ALL_SUBPREF_clustering_args_v2same.tsv"
+    file_o = "/home/sscepano/D4D res/allstuff/CLUSTERING/ALL_SUBPREF_clustering_args.tsv"
     f_o = open(file_o, "w")
     
     for usr in range(500001):
@@ -57,7 +58,31 @@ def save_data_to_matrix(home_calls, last_usr_loc_n_dist):
         suma = float(subpref_calls[subpref_id] + subpref_outside_calls[subpref_id])
         if suma <> 0:
             subpref_pct_inside_calls[subpref_id] = subpref_calls[subpref_id] / suma   
+        subpref_total_traj[subpref_id] = subpref_total_traj[subpref_id] / subpref_num_usr[subpref_id]
         f_o.write(str(subpref_id) + '\t' + str(subpref_calls[subpref_id]) + '\t' + str(subpref_outside_calls[subpref_id]) + '\t' + \
                   str(subpref_pct_inside_calls[subpref_id]) + '\t' + str(subpref_total_traj[subpref_id]) + '\t' + str(subpref_avg_fq[subpref_id]) + '\n')
       
     return
+
+
+
+def recalculate_subpref_traj():
+    
+    total_traj = rd.read_in_BACK_traj_only()
+    scaled_traj = defaultdict(float)
+    num_usrs = rd.read_in_subpref_num_users()
+    
+    file_out = "/home/sscepano/D4D res/allstuff/CLUSTERING/traj_scaled.tsv"
+    f = open(file_out, "w")
+    
+    for subpref in range(256):
+        if num_usrs[subpref] <> 0:
+            scaled_traj[subpref] = total_traj[subpref] / num_usrs[subpref]
+            
+            print scaled_traj[subpref]
+            f.write(str(subpref) + '\t' + str(scaled_traj[subpref]) + '\n')
+    
+    return
+
+
+recalculate_subpref_traj()

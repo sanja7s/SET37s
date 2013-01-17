@@ -159,7 +159,39 @@ def read_in_subpref_avg_fq():
         
         
     return subpref_avg_fq
-        
+
+def read_in_subpref_num_users():
+    
+    subpref_num_usr = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Night Homes/Num_of_users_per_home_subpref.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, num_usr = line.split('\t')
+        subpref =  int(subpref[:-1])
+        num_usr = int(num_usr)
+        subpref_num_usr[subpref] = num_usr
+             
+    return subpref_num_usr        
+
+
+
+def read_in_BACK_traj_only():
+    
+    subpref_traj = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/read_in_BACK_traj_only.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, traj = line.split('\t')
+        subpref =  int(subpref)
+        traj = int(traj)
+        subpref_traj[subpref] = traj
+             
+    return subpref_traj    
+
 
 def read_in_commuting_patterns(c, G, usr_chosen):
     
