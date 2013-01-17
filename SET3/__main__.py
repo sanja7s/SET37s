@@ -45,12 +45,20 @@ import networkx as nx
 #from analyze.by_calling_fq import save_graph_data as a
 #######################################################
 
+######################################################
+## plot user movements to map
+######################################################
+#from read_in import fq_data as rd
+#from visualize.by_calling_fq import map_usr_movements as a
+#from analyze.by_calling_fq import save_graph_data as s
+######################################################
+
 #####################################################
-# plot user movements to map
+# for CLUSTERING data
 #####################################################
-from read_in import fq_data as rd
-from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_calling_fq import save_graph_data as s
+from read_in import clustering_arguments as rd
+#from visualize.by_calling_fq import map_usr_movements as a
+from analyze.by_calling_fq import save_clustering_args as s
 #####################################################
 
 
@@ -72,8 +80,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    #C = ['A']
+    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    C = ['A']
     
 #    ##########################################################
 #    # for all interevent times
@@ -140,31 +148,59 @@ def main():
     ####################################################
     
     
+#    #######################################################################
+#    # this is to analyze commuting or returning patterns during one day for a whole set of subpref users user
+#    #######################################################################
+#    for subpref in range(1,256):
+#        data = nx.DiGraph()
+#        #subpref = 200
+#        usrs_list = rd.read_in_subpref_users(subpref)
+#        print len(usrs_list)
+#    
+#        for c in C:
+#            # this is for single user
+#            usrs_list = rd.read_in_subpref_users(subpref)
+#            data = rd.read_in_commuting_patterns_multiple_users(c, data, usrs_list)
+#    
+#        ####################################################
+#        # this is for analyzing commuting patterns
+#        ####################################################
+#        a.plot_commuting_patterns(data, subpref, is_subpref=True)
+#        s.graph2_file_subpref2(data, subpref)
+
+
+#    #######################################################################
+#    # this is to analyze commuting or returning patterns during one day for a single user
+#    #######################################################################
+#    data = nx.DiGraph()
+#    usr = 1177
+#    
+#    for c in C:
+#        # this is for single user
+#        data = rd.read_in_commuting_patterns(c, data, usr)
+#    #print data
+
+
     #######################################################################
-    # this is to analyze commuting or returning patterns during one day for a whole set of subpref users user
+    # this is for finding CLUSTERING arguments we want
     #######################################################################
-    for subpref in range(1,256):
-        data = nx.DiGraph()
-        #subpref = 200
-        usrs_list = rd.read_in_subpref_users(subpref)
-        print len(usrs_list)
+    # here we save number of calls made from home and number of calls made outside of home subpref for each user
+    home_calls = n.zeros((500001,2), dtype=n.int)
+    # here we save last location (helps calculating) and user travelled distance
+    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.int)
+    # here we save helping center of mass coordinates, for each user two coordinates
+    center_mass_coord = n.zeros((500001,2))
+    usr_traj = n.zeros((500001,137357,2))
     
-        for c in C:
-            # this is for single user
-            usrs_list = rd.read_in_subpref_users(subpref)
-            data = rd.read_in_commuting_patterns_multiple_users(c, data, usrs_list)
-    
-        ####################################################
-        # this is for analyzing commuting patterns
-        ####################################################
-        a.plot_commuting_patterns(data, subpref, is_subpref=True)
-        s.graph2_file_subpref2(data, subpref)
+    for c in C:
+        home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, radius_gyr = rd.read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj)
+
 
     _log.info("Data loaded.")
     while True:
         raw_input("Press enter to start a process cycle:\n")
         try:
-            reload(a)
+            reload(s)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -189,13 +225,20 @@ def main():
             #a.plot_movements(data, subpref)
             #a.data_to_files(data, True)
             #####################################################
-            print 'OVER'
-#            ####################################################
-#            # this is for analyzing commuting patterns
-#            ####################################################
-#            a.plot_commuting_patterns(data, usr)
-#            s.graph2_file2(data, usr)
-#            ####################################################
+#            print 'OVER'
+##            ####################################################
+##            # this is for analyzing commuting patterns
+##            ####################################################
+##            a.plot_commuting_patterns(data, usr)
+##            s.graph2_file2(data, usr)
+##            ####################################################
+
+            ####################################################
+            # this is for CLUSTERING algorithms
+            ####################################################
+            s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
+            
+            ####################################################
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))
