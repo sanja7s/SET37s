@@ -62,6 +62,7 @@ import numpy as n
 #    return home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, rg
 
 
+# this is for the first set of parameters
 def read_in_file(c, home_calls, last_usr_loc_n_dist):
     
     i = 0
@@ -96,6 +97,7 @@ def read_in_file(c, home_calls, last_usr_loc_n_dist):
     print i            
     return home_calls, last_usr_loc_n_dist
 
+# this is for the second set of parameters
 def read_in_file2(c, home_calls, last_usr_loc_n_dist):
     
     i = 0

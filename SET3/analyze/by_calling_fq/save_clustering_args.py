@@ -84,5 +84,22 @@ def recalculate_subpref_traj():
     
     return
 
+def recalculate_num_visits_outside():
+    
+    total_visits = rd.read_in_BACK_num_of_visits_outisde_only()
+    scaled_visits = defaultdict(float)
+    num_usrs = rd.read_in_subpref_num_users()
+    
+    file_out = "/home/sscepano/D4D res/allstuff/CLUSTERING/num_outside_visits_scaled.tsv"
+    f = open(file_out, "w")
+    
+    for subpref in range(256):
+        if num_usrs[subpref] <> 0:
+            scaled_visits[subpref] = total_visits[subpref] / num_usrs[subpref]
+            
+            print scaled_visits[subpref]
+            f.write(str(subpref) + '\t' + str(scaled_visits[subpref]) + '\n')
+    
+    return
 
-recalculate_subpref_traj()
+recalculate_num_visits_outside()

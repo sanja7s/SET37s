@@ -192,6 +192,21 @@ def read_in_BACK_traj_only():
              
     return subpref_traj    
 
+def read_in_BACK_num_of_visits_outisde_only():
+    
+    subpref_avg_num_vis = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/read_in_BACK_num_outisde_visits_only.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, num_vis = line.split('\t')
+        subpref =  int(subpref)
+        num_vis = int(num_vis)
+        subpref_avg_num_vis[subpref] = num_vis
+             
+    return subpref_avg_num_vis    
+
 
 def read_in_commuting_patterns(c, G, usr_chosen):
     
