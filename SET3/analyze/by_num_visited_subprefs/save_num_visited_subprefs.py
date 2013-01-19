@@ -5,6 +5,7 @@ Created on Jan 17, 2013
 '''
 from collections import defaultdict
 from read_in import fq_data as rd
+import numpy as n
 
 def data_to_files(data):
     
@@ -13,11 +14,12 @@ def data_to_files(data):
     usr_home = rd.read_in_user_home_subprefs()
     num_usrs = rd.read_in_subpref_num_users()
     
-    for usr in data:
-        num_visited_subprefs_per_subpref[usr_home[usr]] += sum(data[usr])
+    for usr in range(500001):
+        num_visited_subprefs_per_subpref[usr_home[usr]] += data[usr].sum()
         
     for subpref in range(256):
-        num_visited_subprefs_per_subpref_scaled[subpref] = num_visited_subprefs_per_subpref[subpref] / num_usrs[subpref]
+        if num_usrs[subpref] <> 0:
+            num_visited_subprefs_per_subpref_scaled[subpref] = num_visited_subprefs_per_subpref[subpref] / num_usrs[subpref]
         
         
         
@@ -29,14 +31,16 @@ def data_to_files(data):
     f2 = open(file2, "w")
     f3 = open(file3, "w")
     
-    for usr in data:
-        f1.write(str(usr) + '\t' + str(sum(data[usr])) + '\n')
+    for usr in range(500001):
+        f1.write(str(usr) + '\t' + str(n.sum(data[usr])) + '\n')
         
     for subpref in range(256):
-        f2.write(str(subpref) + '\t' + str(num_visited_subprefs_per_subpref[subpref]) + '\n')
+        if num_visited_subprefs_per_subpref[subpref] <> 0:
+            f2.write(str(subpref) + '\t' + str(num_visited_subprefs_per_subpref[subpref]) + '\n')
         
     for subpref in range(256):
-        f3.write(str(subpref) + '\t' + str(num_visited_subprefs_per_subpref_scaled[subpref]) + '\n')
+        if num_visited_subprefs_per_subpref_scaled[subpref] <> 0:
+            f3.write(str(subpref) + '\t' + str(num_visited_subprefs_per_subpref_scaled[subpref]) + '\n')
         
         
     print file1
