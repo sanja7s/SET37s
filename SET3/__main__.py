@@ -233,7 +233,7 @@ def main():
 #    #######################################################################
 #    # here we save number of calls made from home and number of calls made outside of home subpref for each user
 #    home_calls = n.zeros((500001,2), dtype=n.int)
-#    # here we save last location (helps calculating) and user travelled distance
+#    # here we save last location (helps calculating) and user traveled distance
 #    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.int)
 #    # here we save helping center of mass coordinates, for each user two coordinates
 #    #center_mass_coord = n.zeros((256,2))
@@ -255,14 +255,22 @@ def main():
 #    for c in C:
 #        data = rd.read_in_file(c, data)
 
+#    #######################################################################
+#    # this is for finding CLUSTERING arguments we want: radius gyration
+#    #######################################################################
+#    usr_traj = defaultdict(int)
+#    for usr in range(500001):
+#        usr_traj[usr] = defaultdict(int)
+#    for c in C:
+#        usr_traj = rd.read_in_file0(c, usr_traj)
     #######################################################################
-    # this is for finding CLUSTERING arguments we want: radius gyration
+    # this is for finding CLUSTERING argument trajectory length that I wanted to improve!!!
     #######################################################################
-    usr_traj = defaultdict(int)
-    for usr in range(500001):
-        usr_traj[usr] = defaultdict(int)
+    # here we save last location (helps calculating) and user traveled distance
+    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.float)
+    
     for c in C:
-        usr_traj = rd.read_in_file0(c, usr_traj)
+        last_usr_loc_n_dist = rd.read_in_file2(c, last_usr_loc_n_dist)
 
 
     _log.info("Data loaded.")
@@ -312,12 +320,20 @@ def main():
 ##            ####################################################
 
 
+#            ####################################################
+#            # this is for CLUSTERING algorithms
+#            ####################################################
+#            #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
+#            data = s.calculate_radius_gyration_from_data(usr_traj)
+#            s.data_to_file0(data)
+#            
+#            ####################################################
+
             ####################################################
-            # this is for CLUSTERING algorithms
+            # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            data = s.calculate_radius_gyration_from_data(usr_traj)
-            s.data_to_file0(data)
+            s.data_to_file2(last_usr_loc_n_dist) 
             
             ####################################################
             

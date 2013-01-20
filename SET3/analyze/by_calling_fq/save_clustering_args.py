@@ -76,6 +76,16 @@ def data_to_file0(data):
     
     return
 
+def data_to_file2(data):
+    
+    file = "/home/sscepano/D4D res/allstuff/CLUSTERING/usr_traj_lengthALL.tsv"
+    f = open(file, 'w')
+    
+    for usr in range(500001):
+        f.write(str(usr) + '\t' + str(data[usr][1]) + '\n')   
+    
+    return
+
 
 # it is much more convenient to read in all user trajectories at once
 # and then to calculate the gyration radius here
