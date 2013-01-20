@@ -78,7 +78,7 @@ def data_to_file0(data):
 
 def data_to_file2(data):
     
-    file = "/home/sscepano/D4D res/allstuff/CLUSTERING/usr_traj_lengthALL.tsv"
+    file = "/home/sscepano/D4D res/allstuff/CLUSTERING/usr_traj_lengthALL2.tsv"
     f = open(file, 'w')
     
     for usr in range(500001):
