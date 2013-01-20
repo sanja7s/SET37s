@@ -7,9 +7,6 @@ Created on Jan 20, 2013
 import pyplot as plt
 import numpy as nn
 
-# we find this from the file by reading it once before
-max_num_calls = 137356 + 1
-
 def from_file_radius_gyr(file_name): 
    
     usr_rg = nn.zeros(500001)

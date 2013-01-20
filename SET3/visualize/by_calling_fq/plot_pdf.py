@@ -123,5 +123,92 @@ def from_file_num_calls(file_name):
 
     return   
 
+## invoke the function for plotting number of calls and frequency probability distribution (percents of users)
+#from_file_num_calls("/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv")
+
+
+
+
+def from_file_home_outside_calls(): 
+    
+    file1 = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_home_calls.tsv"
+    file2 = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_outside_calls.tsv"
+   
+    usr_home_c = n.zeros(500001)
+    usr_outside_c = n.zeros(500001)
+
+    i = 0
+    f1 = open(file1, 'r')    
+    f2 = open(file2, 'r') 
+    
+    
+    # read the file1
+    for line in f1:
+        i = i + 1
+        u, home_c = line.split('\t')
+        home_c = float(home_c)
+        u = int(u)
+        usr_home_c[u] = home_c
+        
+            # read the file
+    for line in f2:
+        i = i + 1
+        u, outside_c = line.split('\t')
+        outside_c = float(outside_c)
+        u = int(u)
+        usr_outside_c[u] = outside_c
+
+############################################################################################################################
+# THIS is to plot pdf of home calls
+############################################################################################################################
+
+    fig1 = plt.figure(1)
+    ax = fig1.add_subplot(211)
+    nn, bins, rectangles = ax.hist(usr_home_c, 100, normed=True)
+
+    #plt.plot(nc_distr_pct, 'ro', linewidth=0.5, label= 'pdf Num of calls')
+    
+    plt.xlabel('NcH, number of calls from the home subprefecture')
+    plt.ylabel('P(NcH)')
+    plt.legend()   
+    
+#    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+    plt.yscale('log')
+    plt.xscale('log')
+#    figure_name = "/home/sscepano/D4D res/allstuff/rg/pdf rg loglog.png"
+    
+    #this is a regular plot file, then comment the previous loglog block
+    #figure_name = "/home/sscepano/D4D res/allstuff/rg/pdf home calls.png"
+      
+    #print(figure_name)
+    #plt.savefig(figure_name, format = "png")        
+    
+############################################################################################################################
+# THIS is to plot pdf of outside calls
+############################################################################################################################
+
+    #fig1 = plt.figure(1)
+    ax = fig1.add_subplot(212)
+    nn, bins, rectangles = ax.hist(usr_outside_c, 100, normed=True)
+
+    #plt.plot(nc_distr_pct, 'ro', linewidth=0.5, label= 'pdf Num of calls')
+    
+    plt.xlabel('NcO, number of calls from outside the home subprefecture')
+    plt.ylabel('P(NcO)')
+    plt.legend()   
+    
+#    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+    plt.yscale('log')
+    plt.xscale('log')
+    figure_name = "/home/sscepano/D4D res/allstuff/rg/pdf home outside calls.png"
+    
+#    #this is a regular plot file, then comment the previous loglog block
+#    figure_name = "/home/sscepano/D4D res/allstuff/rg/pdf home outside calls.png"
+      
+    print(figure_name)
+    plt.savefig(figure_name, format = "png")        
+    
+    return   
+
 # invoke the function for plotting number of calls and frequency probability distribution (percents of users)
-from_file_num_calls("/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv")
+from_file_home_outside_calls()
