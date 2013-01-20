@@ -4,7 +4,9 @@ Created on Jan 16, 2013
 @author: sscepano
 '''
 from read_in import fq_data as rd
+from read_in import clustering_arguments as rd0
 from collections import defaultdict
+import math
 
 #def save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr):
 #    
@@ -64,7 +66,80 @@ def save_data_to_matrix(home_calls, last_usr_loc_n_dist):
       
     return
 
+def data_to_file0(data):
+    
+    file = "/home/sscepano/D4D res/allstuff/CLUSTERING/usr_radius_gyration3.tsv"
+    f = open(file, 'w')
+    
+    for usr in data.iterkeys():
+        f.write(str(usr) + '\t' + str(data[usr]) + '\n')   
+    
+    return
 
+
+# it is much more convenient to read in all user trajectories at once
+# and then to calculate the gyration radius here
+def calculate_radius_gyration_from_data(usr_traj):
+    
+    subpref_pos_data = rd0.read_in_subpref_pos_file()
+    # we save result for each user here
+    rg = defaultdict(int)
+    
+    # this is added after eureka hehe :)
+    num_places = 0
+    file_name = "/home/sscepano/D4D res/allstuff/distr of num of visited subprefs/1/2 check/save_num_places_visited.tsv"
+    f = open(file_name, "w")
+    
+    # loop the users                
+    for usr in usr_traj.iterkeys():
+            # calculate total number of places visited per user (hehe, I can use this to verify what I calculated before for the number of visited places)
+            num_places = 0
+            L = 0
+            for subpref in usr_traj[usr]:
+                if usr_traj[usr][subpref] > 0:
+                    L += usr_traj[usr][subpref]
+                    num_places += 1
+            #print L
+            
+            f.write(str(usr) + '\t' + str(num_places) + '\n')  
+            
+            # here we save lon/lat/weight data
+            lon = []
+            lat = []
+            w = []
+            # populate the arrays
+            for subpref in range(256):
+                if usr_traj[usr][subpref] > 0:
+                    lon.append(subpref_pos_data[subpref][0])
+                    lat.append(subpref_pos_data[subpref][1])
+                    w.append(usr_traj[usr][subpref])
+            
+            # if we found any visited places, then we calculate midpoint for all of them
+            # this is what Barabasi calls center of mass of trajectory      
+            if len(lon) > 0:        
+                center_mass_lon, center_mass_lat = rd0.find_mid_point(lon, lat, w)
+                
+            # we start with zero radius of gyration
+            radius_gyr = 0.0
+            
+            # here we calculate the distances from the midpoint for all the traveled places for the user
+            for subpref in range(256):
+                if usr_traj[usr][subpref] > 0: 
+                    # subtracting tow vectors and then squaring the difference should result in squared distance between them
+                    d = rd0.find_distance(subpref_pos_data[subpref][0], subpref_pos_data[subpref][1], center_mass_lon, center_mass_lat)
+                    ds = d*d
+                    # this line I had inversed with the line above and it was not correct calculation
+                    # we just here multiply by the number of times we found the user in this place
+                    radius_gyr += ds * usr_traj[usr][subpref]
+            
+            # for users who were not traveling at all (?)        
+            if L > 0:    
+                radius_gyr = math.sqrt(radius_gyr / L)
+                
+            # assign this user's radius to output array    
+            rg[usr] = radius_gyr  
+    
+    return rg
 
 def recalculate_subpref_traj():
     
@@ -102,4 +177,4 @@ def recalculate_num_visits_outside():
     
     return
 
-recalculate_num_visits_outside()
+#recalculate_num_visits_outside()

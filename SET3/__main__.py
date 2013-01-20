@@ -61,12 +61,20 @@ import networkx as nx
 #from analyze.by_calling_fq import save_clustering_args as s
 ######################################################
 
+######################################################
+## for num visited subpref data
+######################################################
+#from read_in import num_visited_subpref_data as rd
+##from visualize.by_calling_fq import map_usr_movements as a
+#from analyze.by_num_visited_subprefs import save_num_visited_subprefs as s
+######################################################
+
 #####################################################
-# for num visited subpref data
+# for CLUSTERING data: radius gyration
 #####################################################
-from read_in import num_visited_subpref_data as rd
+from read_in import clustering_arguments as rd
 #from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_num_visited_subprefs import save_num_visited_subprefs as s
+from analyze.by_calling_fq import save_clustering_args as s
 #####################################################
 
 
@@ -242,10 +250,19 @@ def main():
 #
 #    for c in C:
 #        home_calls, last_usr_loc_n_dist = rd.read_in_file(c, home_calls, last_usr_loc_n_dist)
-    data = n.zeros((500001,256),dtype=n.int)
+#    data = n.zeros((500001,256),dtype=n.int)
+#
+#    for c in C:
+#        data = rd.read_in_file(c, data)
 
+    #######################################################################
+    # this is for finding CLUSTERING arguments we want: radius gyration
+    #######################################################################
+    usr_traj = defaultdict(int)
+    for usr in range(500001):
+        usr_traj[usr] = defaultdict(int)
     for c in C:
-        data = rd.read_in_file(c, data)
+        usr_traj = rd.read_in_file0(c, usr_traj)
 
 
     _log.info("Data loaded.")
@@ -299,7 +316,8 @@ def main():
             # this is for CLUSTERING algorithms
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.data_to_files(data)
+            data = s.calculate_radius_gyration_from_data(usr_traj)
+            s.data_to_file0(data)
             
             ####################################################
             

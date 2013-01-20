@@ -10,56 +10,31 @@ from datetime import datetime, date
 import math
 import numpy as n
 
-## we take in user calls on weekdays between 7pm and 5am as being from HOME and count number of such calls
-## for each user plus the number of calls on the weekends in general
-#def read_in_file(c, home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj):
-#    
-#    i = 0
-#    usr_home = read_in_user_home_subprefs()
-#    subpref_dist = find_subpref_distance()
-#    subpref_pos_data = read_in_subpref_pos_file()
-#    rg = defaultdict(int)
-#    
-#    
-#    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
-#    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
-#    #file_name = '100Klines.txt'
-#    f_path = join(D4D_path_SET3,file_name)
-#    if isfile(f_path) and file_name != '.DS_Store':
-#            file7s = open(f_path, 'r')
-#            for line in file7s:
-#                i = i + 1
-#                usr, call_time, subpref = line.split('\t')
-#                usr = int(usr)
-#                subpref = int(subpref)
-#                if usr_home[usr] == subpref:
-#                    home_calls[usr][0] += 1
-#                else: 
-#                    home_calls[usr][1] += 1
-#                if last_usr_loc_n_dist[usr][0] <> 0:
-#                    if subpref <> last_usr_loc_n_dist[usr][0]:
-#                        last_usr_loc_n_dist[usr][1] += subpref_dist[last_usr_loc_n_dist[usr][0]][subpref]
-#                else:
-#                    last_usr_loc_n_dist[usr][0] = subpref
-#                if center_mass_coord[usr][0] <> 0 and center_mass_coord[usr][1] <> 0:
-#                    L = home_calls[usr][0] + home_calls[usr][1]
-#                    usr_traj[usr][L-1][0] = subpref_pos_data[subpref][0]
-#                    usr_traj[usr][L-1][1] = subpref_pos_data[subpref][1]
-#                    new_cm = find_mid_point(center_mass_coord[usr][0],center_mass_coord[usr][1],subpref_pos_data[subpref][0], subpref_pos_data[subpref][1])
-#                    center_mass_coord[usr][0] = new_cm[0]
-#                    center_mass_coord[usr][1] = new_cm[1]
-#                    radius_gyr = 0
-#                    for i in range(L): 
-#                        d = find_distance(usr_traj[usr][i][0], usr_traj[usr][i][1], center_mass_coord[usr][0], center_mass_coord[usr][1])
-#                        radius_gyr += d*d
-#                    radius_gyr = math.sqrt(radius_gyr / L)
-#                    rg[usr] = radius_gyr  
-#                else:
-#                    center_mass_coord[usr][0] = subpref_pos_data[subpref][0]
-#                    center_mass_coord[usr][1] = subpref_pos_data[subpref][1]
-#    
-#    print i            
-#    return home_calls, last_usr_loc_n_dist, center_mass_coord, usr_traj, rg
+# this is to read in radius of gyration
+# we need user trajectory in order to follow the visited places
+# as radius gyration calculation at any moment needs whole list
+# of so far visited places
+def read_in_file0(c, usr_traj):
+   
+    i = 0
+    
+    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
+    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    #file_name = '100Klines.txt'
+    f_path = join(D4D_path_SET3,file_name)
+    if isfile(f_path) and file_name != '.DS_Store':
+            file7s = open(f_path, 'r')
+            for line in file7s:
+                i = i + 1
+                usr, call_time, subpref = line.split('\t')
+                usr = int(usr)
+                subpref = int(subpref)
+                # for each user we hold a dictionary with all the visited subprefs and the number of visits to each
+                # this is done by increasing the number in the dict each time user visits the subpref
+                usr_traj[usr][subpref] += 1 
+    
+    print i            
+    return usr_traj
 
 
 # this is for the first set of parameters
@@ -220,24 +195,54 @@ def find_subpref_mid_point():
                 
     return mid_point_data  
 
-def find_mid_point(lon1, lat1, lon2, lat2):
+def find_mid_point(lon, lat, w):
+      
+    X = defaultdict(float)
+    Y = defaultdict(float)
+    Z = defaultdict(float)
     
-    mid_point_data = n.zeros((2))
-             
-    dLat = math.radians(lat2-lat1)
-    dLon = math.radians(lon2-lon1)
-    lat1 = math.radians(lat1)
-    lat2 = math.radians(lat2)
+    for i in range(len(lon)):         
+        lat[i] = math.radians(lat[i])
+        lon[i] = math.radians(lon[i])
     
-    Bx= math.cos(lat2) * math.cos(dLon)    
-    By = math.cos(lat2) * math.sin(dLon)
-    lat3 = math.atan2(math.sin(lat1)+math.sin(lat2), math.sqrt( (math.cos(lat1)+Bx)*(math.cos(lat1)+Bx) + By*By))
-    lon3 = lon1 + math.atan2(By, math.cos(lat1) + Bx)
+        X[i] = math.cos(lat[i])*math.cos(lon[i])
+        Y[i] = math.cos(lat[i])*math.sin(lon[i])
+        Z[i] = math.sin(lat[i])
+        
+    #W = float(len(lon))
+    W = float(sum(w))
+    #print W
     
-    mid_point_data[0] = lon3
-    mid_point_data[1] = lat3            
+    x = 0
+    y = 0
+    z = 0
+        
+#    x = sum(X) / W
+#    print sum(X)
+#    y = sum(Y) / W
+#    z = sum(Z) / W
+
+    for i in range(len(lon)):
+        x += X[i] * w[i]
+    
+    for i in range(len(lon)):
+        y += Y[i] * w[i]
+        
+    for i in range(len(lon)):
+        z += Z[i] * w[i]
+        
+    x = x / W
+    y = y / W
+    z = z / W
+    
+    lon_mid = math.atan2(y,x)
+    hyp = math.sqrt(x*x + y*y)
+    lat_mid = math.atan2(z, hyp)
+    
+    lon_mid = math.degrees(lon_mid)
+    lat_mid = math.degrees(lat_mid)
                 
-    return mid_point_data  
+    return lon_mid, lat_mid  
 
 
 def read_in_subpref_pos_file():
@@ -259,7 +264,13 @@ def read_in_subpref_pos_file():
                 
     return subpref_pos_data
 
+#w = [1095.75, 730.5, 365.25]
+#lon = [-74.0059731, -87.6297982, -84.3879824]
+#lat = [40.7143528, 41.8781136, 33.7489954]
 
-#mid = find_mid_point(-4.014445,5.42112,-4.014445,5.42112)
-#print mid[0]
-#print mid[1]
+#w = [1, 1]
+#lon = [-74.0059731, -74.0059731]
+#lat = [40.7143528, 40.7143528]
+#mid_lon, mid_lat = find_mid_point(lon, lat, w)
+#print mid_lon
+#print mid_lat
