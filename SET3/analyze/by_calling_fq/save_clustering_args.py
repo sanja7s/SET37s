@@ -187,4 +187,149 @@ def recalculate_num_visits_outside():
     
     return
 
+def calculate_rg_subpref_from_usr_file():
+    
+    usr_home = rd.read_in_user_home_subprefs()
+    subpref_num_users = rd.read_in_subpref_num_users()
+    
+    subpref_rg = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_radius_gyration.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        usr, rg = line.split('\t')
+        usr =  int(usr)
+        rg = float(rg)
+        subpref_rg[usr_home[usr]] += rg
+        
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            subpref_rg[subpref] = subpref_rg[subpref] / float(subpref_num_users[subpref])
+        
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_rg.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_rg[subpref]) + '\n')
+             
+    return subpref_rg  
+
 #recalculate_num_visits_outside()
+#calculate_rg_subpref_from_usr_file()
+
+
+def calculate_hc_subpref_from_usr_file():
+    
+    usr_home = rd.read_in_user_home_subprefs()
+    subpref_num_users = rd.read_in_subpref_num_users()
+    
+    subpref_rg = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_home_calls.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        usr, rg = line.split('\t')
+        usr =  int(usr)
+        rg = float(rg)
+        subpref_rg[usr_home[usr]] += rg
+        
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            subpref_rg[subpref] = subpref_rg[subpref] / float(subpref_num_users[subpref])
+        
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_hc.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_rg[subpref]) + '\n')
+             
+    return subpref_rg  
+
+#recalculate_num_visits_outside()
+calculate_hc_subpref_from_usr_file()
+
+
+def calculate_oc_subpref_from_usr_file():
+    
+    usr_home = rd.read_in_user_home_subprefs()
+    subpref_num_users = rd.read_in_subpref_num_users()
+    
+    subpref_rg = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_outside_calls.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        usr, rg = line.split('\t')
+        usr =  int(usr)
+        rg = float(rg)
+        subpref_rg[usr_home[usr]] += rg
+        
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            subpref_rg[subpref] = subpref_rg[subpref] / float(subpref_num_users[subpref])
+        
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_oc.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_rg[subpref]) + '\n')
+             
+    return subpref_rg  
+
+#recalculate_num_visits_outside()
+calculate_oc_subpref_from_usr_file()
+
+
+def calculate_traj_subpref_from_usr_file():
+    
+    usr_home = rd.read_in_user_home_subprefs()
+    subpref_num_users = rd.read_in_subpref_num_users()
+    
+    subpref_rg = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_traj_length.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        usr, rg = line.split('\t')
+        usr =  int(usr)
+        rg = float(rg)
+        subpref_rg[usr_home[usr]] += rg
+        
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            subpref_rg[subpref] = subpref_rg[subpref] / float(subpref_num_users[subpref])
+        
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_traj.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_rg[subpref]) + '\n')
+             
+    return subpref_rg  
+
+#recalculate_num_visits_outside()
+#calculate_traj_subpref_from_usr_file()
+
+def save_subpref_calling_fq():
+    
+    subpref_num_users = rd.read_in_subpref_num_users()
+    subpref_fq = rd.read_in_subpref_avg_fq()
+    
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_fq.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_fq[subpref]) + '\n')
+             
+    return subpref_fq   
+    
+save_subpref_calling_fq()    
