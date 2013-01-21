@@ -250,7 +250,7 @@ def calculate_hc_subpref_from_usr_file():
     return subpref_rg  
 
 #recalculate_num_visits_outside()
-calculate_hc_subpref_from_usr_file()
+#calculate_hc_subpref_from_usr_file()
 
 
 def calculate_oc_subpref_from_usr_file():
@@ -283,7 +283,7 @@ def calculate_oc_subpref_from_usr_file():
     return subpref_rg  
 
 #recalculate_num_visits_outside()
-calculate_oc_subpref_from_usr_file()
+#calculate_oc_subpref_from_usr_file()
 
 
 def calculate_traj_subpref_from_usr_file():
@@ -332,4 +332,36 @@ def save_subpref_calling_fq():
              
     return subpref_fq   
     
-save_subpref_calling_fq()    
+#save_subpref_calling_fq()    
+
+
+def calculate_fq_subpref_from_usr_file():
+    
+    usr_home = rd.read_in_user_home_subprefs()
+    subpref_num_users = rd.read_in_subpref_num_users()
+    
+    subpref_fq = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_calling_fq.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        usr, fq = line.split('\t')
+        usr =  int(usr)
+        fq = float(fq)
+        subpref_fq[usr_home[usr]] += fq
+        
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            subpref_fq[subpref] = subpref_fq[subpref] / float(subpref_num_users[subpref])
+        
+    file_name2 = "/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/subpref/Subpref_avg_calling_fq_check.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_fq[subpref]) + '\n')
+             
+    return subpref_fq
+
+#calculate_fq_subpref_from_usr_file()
