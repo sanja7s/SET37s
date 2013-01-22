@@ -127,6 +127,111 @@ def from_file_num_calls(file_name):
 #from_file_num_calls("/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv")
 
 
+def from_fq_files_hist_pdf(): 
+    
+    file_name= "/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv"
+    file_name2 = "/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_calling_fq.tsv"
+   
+    # here we store the num of calls made by a user
+    usr_and_his_num_calls = n.zeros(500001, dtype=n.int)
+
+    nc_distr = n.zeros(max_num_calls, dtype=n.int)
+
+    # a loop where we populate those two arrays from the file
+    i = 0
+    f = open(file_name, 'r')    
+    # read the file
+    for line in f:
+        i = i + 1
+        u, nc = line.split('\t')
+        nc = int(nc)
+        u = int(u)
+        usr_and_his_num_calls[u] = nc
+        nc_distr[nc] += 1
+
+    mi = min(usr_and_his_num_calls)
+    mx = max(usr_and_his_num_calls)
+    print("Minimum number of calls ", mi)
+    print("Maximum number of calls ", mx)
+    
+    total_u = float(sum(nc_distr))
+    print("Total users found ", total_u)
+    
+
+
+############################################################################################################################
+# THIS is to plot number of users pdf
+############################################################################################################################
+
+#    fig1 = plt.figure(1)
+#    ax = fig1.add_subplot(111)
+#    nn, bins, rectangles = ax.hist(usr_and_his_num_calls, 100, normed=True)
+#
+#    plt.xlabel('N, num of calls')
+#    plt.ylabel('P(N)')
+#    plt.legend()   
+#    
+#    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+#    plt.yscale('log')
+#    plt.xscale('log')
+#    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/hist of num of calls loglog.png" 
+#    
+##    #this is a regular plot file, then comment the previous loglog block
+##    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/hist of num of calls.png"
+#      
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png")
+#    
+#    plt.clf()       
+    
+###############################################################################################################################
+# THIS is to plot fq pdf
+###############################################################################################################################
+
+    # here we store the num of calls made by a user
+    usr_and_his_fq = n.zeros(500001)
+
+    # a loop where we populate those two arrays from the file
+    i = 0
+    f2 = open(file_name2, 'r')    
+    # read the file
+    for line in f2:
+        i = i + 1
+        u, fq = line.split('\t')
+        fq = float(fq)
+        u = int(u)
+        usr_and_his_fq[u] = fq
+
+    mi = min(usr_and_his_fq)
+    mx = max(usr_and_his_fq)
+    print("Minimum fq of calls ", mi)
+    print("Maximum fq of calls ", mx)
+        
+    fig2 = plt.figure(2)
+    ax = fig2.add_subplot(111)
+    nn, bins, rectangles = ax.hist(usr_and_his_fq, 100, normed=True)
+    
+    plt.xlabel('fq of calls')
+    plt.ylabel('P(fq)')
+    plt.legend()   
+    
+    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/hist of fq of calls.png" 
+    
+#    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+#    plt.yscale('log')
+#    plt.xscale('log')
+#    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/hist of fq of calls loglog.png" 
+      
+    print(figure_name)
+    plt.savefig(figure_name, format = "png")   
+    
+
+    return   
+
+## invoke the function for plotting number of calls and frequency probability distribution (percents of users)
+from_fq_files_hist_pdf()
+
+
 
 
 def from_file_home_outside_calls(): 
@@ -211,4 +316,4 @@ def from_file_home_outside_calls():
     return   
 
 # invoke the function for plotting number of calls and frequency probability distribution (percents of users)
-from_file_home_outside_calls()
+#from_file_home_outside_calls()
