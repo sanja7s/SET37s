@@ -41,7 +41,7 @@ def save_data_to_file(data):
 #        sleep_hour[subpref] = analyze_cum_calling_data2(cum_data)
 #        wake_up_hour[subpref] = analyze_cum_calling_data1(cum_data)   
 #        
-#    file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_wake_up_sleep_hour.tsv"
+#    file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_weekend_wake_up_sleep_hour.tsv"
 #    f = open(file_name,"w")
 #    
 #    num_users = rd.read_in_subpref_num_users()
@@ -51,26 +51,26 @@ def save_data_to_file(data):
 #            f.write(str(subpref) + '\t' + str(wake_up_hour[subpref]) + '\t' + str(sleep_hour[subpref]) + '\n')
 
     
-#    pct_night_calls = defaultdict(float)
-#
-#    for subpref in range(256):
-#        pct_night_calls[subpref] = pct_calls_at_night(data[subpref]) 
-#        
-#    file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_pct_night_calls.tsv"
-#    f = open(file_name,"w")
-#    
-#    for subpref in pct_night_calls.iterkeys():
-#        if num_users[subpref] > 0:
-#            f.write(str(subpref) + '\t' + str(pct_night_calls[subpref]) + '\n')
+    pct_night_calls = defaultdict(float)
 
-    for subpref in data.iterkeys():
-        file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref all files/calls_per_hour_" + str(subpref) + ".tsv"
-        f = open(file_name, "w")
+    for subpref in range(256):
+        pct_night_calls[subpref] = pct_calls_at_night(data[subpref]) 
         
-        for hr in data[subpref].iterkeys():
-            f.write(str(hr) + '\t' + str(data[subpref][hr]) + '\n')
-            
-        f.close()
+    file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_weekdend_pct_night_calls.tsv"
+    f = open(file_name,"w")
+    
+    for subpref in pct_night_calls.iterkeys():
+        if num_users[subpref] > 0:
+            f.write(str(subpref) + '\t' + str(pct_night_calls[subpref]) + '\n')
+
+#    for subpref in data.iterkeys():
+#        file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref all files/weekends/calls_per_hour_" + str(subpref) + ".tsv"
+#        f = open(file_name, "w")
+#        
+#        for hr in data[subpref].iterkeys():
+#            f.write(str(hr) + '\t' + str(data[subpref][hr]) + '\n')
+#            
+#        f.close()
     
     return
 
@@ -137,7 +137,7 @@ def from_data_to_timeplot(data, subpref):
     
     #show()
 
-    figure_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_24hour_calling_pattern_" + str(subpref) + ".png"
+    figure_name = "/home/sscepano/D4D res/allstuff/call timing/reg/weekends/" + str(subpref) + "_subpref_weekend_24hour_calling_pattern.png"
       
     print(figure_name)
     plt.savefig(figure_name, format = "png")    
@@ -161,7 +161,7 @@ def from_data_to_timeplot2(data, subpref):
     
     #show()
 
-    figure_name = "/home/sscepano/D4D res/allstuff/call timing/cum_scaled/subpref_24hour_calling_pattern_" + str(subpref) + ".png"
+    figure_name = "/home/sscepano/D4D res/allstuff/call timing/cum_scaled/weekends/subpref_weekend_24hour_calling_pattern_" + str(subpref) + ".png"
       
     print(figure_name)
     plt.savefig(figure_name, format = "png")    
