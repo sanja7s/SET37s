@@ -334,6 +334,22 @@ def save_subpref_calling_fq():
     
 #save_subpref_calling_fq()    
 
+def save_subpref_visited_pl():
+    
+    subpref_num_users = rd.read_in_subpref_num_users()
+    subpref_pl = rd.read_in_subpref_num_places()
+    
+    file_name2 = "/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/subpref_avg_num_visited_pl.tsv"
+    f2 = open(file_name2, 'w')
+    
+    for subpref in range(256):
+        if subpref_num_users[subpref] > 0:
+            f2.write(str(subpref) + '\t' + str(subpref_pl[subpref]) + '\n')
+             
+    return subpref_pl   
+
+#save_subpref_visited_pl()
+
 
 def calculate_fq_subpref_from_usr_file():
     

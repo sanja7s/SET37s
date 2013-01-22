@@ -69,12 +69,20 @@ import networkx as nx
 #from analyze.by_num_visited_subprefs import save_num_visited_subprefs as s
 ######################################################
 
+######################################################
+## for CLUSTERING data: radius gyration
+######################################################
+#from read_in import clustering_arguments as rd
+##from visualize.by_calling_fq import map_usr_movements as a
+#from analyze.by_calling_fq import save_clustering_args as s
+######################################################
+
 #####################################################
 # for CLUSTERING data: radius gyration
 #####################################################
-from read_in import clustering_arguments as rd
+from read_in import call_timing_data as rd
 #from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_calling_fq import save_clustering_args as s
+from analyze.by_call_timing import data_to_file as s
 #####################################################
 
 
@@ -263,14 +271,37 @@ def main():
 #        usr_traj[usr] = defaultdict(int)
 #    for c in C:
 #        usr_traj = rd.read_in_file0(c, usr_traj)
+#    #######################################################################
+#    # this is for finding CLUSTERING argument trajectory length that I wanted to improve!!!
+#    #######################################################################
+#    # here we save last location (helps calculating) and user traveled distance
+#    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.float)
+#    
+#    for c in C:
+#        last_usr_loc_n_dist = rd.read_in_file2(c, last_usr_loc_n_dist)
+#
+#
+#    _log.info("Data loaded.")
+#    while True:
+#        raw_input("Press enter to start a process cycle:\n")
+#        try:
+#            reload(s)
+#        except NameError:
+#            _log.error("Could not reload the module.")
+#        try:
+#            # THIS THE FUNCTION YOU ARE TESTING
+
+
     #######################################################################
-    # this is for finding CLUSTERING argument trajectory length that I wanted to improve!!!
+    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
     #######################################################################
     # here we save last location (helps calculating) and user traveled distance
-    last_usr_loc_n_dist = n.zeros((500001,2), dtype=n.float)
+    data = defaultdict(int)
+    for subpref in range(256):
+        data[subpref] = defaultdict(int)
     
     for c in C:
-        last_usr_loc_n_dist = rd.read_in_file2(c, last_usr_loc_n_dist)
+        data = rd.read_in_file(c, data)
 
 
     _log.info("Data loaded.")
@@ -333,7 +364,7 @@ def main():
             # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.data_to_file2(last_usr_loc_n_dist) 
+            s.save_data_to_file(data) 
             
             ####################################################
             

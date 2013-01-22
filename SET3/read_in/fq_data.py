@@ -160,6 +160,21 @@ def read_in_subpref_avg_fq():
         
     return subpref_avg_fq
 
+def read_in_subpref_num_places():
+    
+    subpref_avg_pl = defaultdict(int)
+    
+    file_name = "/home/sscepano/D4D res/allstuff/distr of num of visited subprefs/1/subpref_scaled_num_visited_subprefs.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, avg_pl = line.split('\t')
+        subpref =  int(subpref)
+        avg_pl = int(avg_pl)
+        subpref_avg_pl[subpref] = avg_pl       
+        
+    return subpref_avg_pl
+
 def read_in_subpref_num_users():
     
     subpref_num_usr = defaultdict(float)
