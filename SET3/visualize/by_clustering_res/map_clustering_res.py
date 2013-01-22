@@ -15,6 +15,11 @@ mpl.rcParams['axes.labelsize'] = 8.
 mpl.rcParams['xtick.labelsize'] = 6.
 mpl.rcParams['ytick.labelsize'] = 6.
 
+from shapelib import ShapeFile
+import dbflib
+from matplotlib.collections import LineCollection
+from matplotlib import cm
+
 
 ###########################################################################################
 
@@ -36,10 +41,6 @@ m = Basemap(llcrnrlon=-9, \
 
 m.drawcoastlines()
 
-from shapelib import ShapeFile
-import dbflib
-from matplotlib.collections import LineCollection
-from matplotlib import cm
 
 shp = ShapeFile(r'/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE')
 dbf = dbflib.open(r'/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE')
@@ -85,7 +86,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_3clusters.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_3clusters.png',dpi=1000)
 #plt.show()
 
 ###################################################################################################3
@@ -150,7 +151,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_2clusters.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_2clusters.png',dpi=1000)
 #plt.show()
 
 
@@ -220,7 +221,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_4clusters.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_4clusters.png',dpi=1000)
 
 
 
@@ -292,7 +293,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_5clusters.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_5clusters.png',dpi=1000)
 
 ###################################################################################################3
 
@@ -364,7 +365,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_6clusters.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_6clusters.png',dpi=1000)
 
 
 
@@ -440,5 +441,4 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/1/kmeans5args_7clusters.png',dpi=1000)
-
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/pca/kmeans10args_7clusters.png',dpi=1000)

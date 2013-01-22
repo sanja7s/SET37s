@@ -16,7 +16,8 @@ mpl.rcParams['axes.labelsize'] = 8.
 mpl.rcParams['xtick.labelsize'] = 6.
 mpl.rcParams['ytick.labelsize'] = 6.
 
-subpref_avg_fq = rd.read_in_subpref_avg_fq()
+#subpref_avg_fq = rd.read_in_subpref_avg_fq()
+gs1 = rd.read_in_gs1()
 
 fig = plt.figure(1)
 #Custom adjust of the subplots
@@ -62,7 +63,7 @@ for npoly in range(shp.info()[0]):
         print shapedict
         name = shapedict["ID_DEPART"]
         subpref_id = shapedict["ID_SP"]
-        num = ["%.2f" % subpref_avg_fq[subpref_id]]
+        num = ["%.2f" % gs1[subpref_id]]
 #        for name, xc, yc in zip(num, x, y):
 #            plt.text(xc, yc, name)
         #color_col
@@ -74,11 +75,11 @@ for npoly in range(shp.info()[0]):
     #print subpref_id
     #print name
     lines = LineCollection(shpsegs,antialiaseds=(1,))
-    lines.set_facecolors(str(1 - subpref_avg_fq[subpref_id]))
+    lines.set_facecolors(str(1 - gs1[subpref_id]))
     lines.set_edgecolors('k')
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
 
     
-#plt.savefig('/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/maps/avg_fq_grayscale_inv.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/res/maps/2/gs/pca_10args_gs1.png',dpi=1000)
 plt.show()

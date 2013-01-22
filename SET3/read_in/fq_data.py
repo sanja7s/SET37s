@@ -160,6 +160,21 @@ def read_in_subpref_avg_fq():
         
     return subpref_avg_fq
 
+def read_in_gs1():
+    
+    subpref_gs1 = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca_kmeans_gs1.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, gs1 = line.split('\t')
+        subpref =  int(subpref)
+        gs1 = float(gs1)
+        subpref_gs1[subpref] = gs1
+        
+    return subpref_gs1
+
 def read_in_subpref_num_places():
     
     subpref_avg_pl = defaultdict(int)

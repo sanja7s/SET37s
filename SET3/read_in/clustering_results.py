@@ -9,7 +9,7 @@ def read_in_subpref_assigned_3clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_3clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_3clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
@@ -24,7 +24,7 @@ def read_in_subpref_assigned_2clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_2clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_2clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
@@ -40,7 +40,7 @@ def read_in_subpref_assigned_4clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_4clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_4clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
@@ -57,7 +57,7 @@ def read_in_subpref_assigned_5clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_5clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_5clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
@@ -73,7 +73,7 @@ def read_in_subpref_assigned_6clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_6clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_6clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
@@ -90,7 +90,7 @@ def read_in_subpref_assigned_7clusters():
     
     subpref_cluster = defaultdict(int)
     
-    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/1/5args_kmeans_7clusters.csv"
+    file_name = "/home/sscepano/D4D res/allstuff/CLUSTERING/res/2/pca7/10args_kmeans_7clusters.csv"
     f = open(file_name,'r')
     
     for line in f:
