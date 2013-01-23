@@ -73,3 +73,9 @@ def graph2_file_subpref2(G, subpref):
     plt.savefig(figure_name, format = "png")    
     
     return
+
+
+def save_commuting_graph(G):
+    
+    
+    return G

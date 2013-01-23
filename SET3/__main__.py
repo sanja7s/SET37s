@@ -77,12 +77,20 @@ import networkx as nx
 #from analyze.by_calling_fq import save_clustering_args as s
 ######################################################
 
+######################################################
+## for CLUSTERING data: radius gyration
+######################################################
+#from read_in import simple_subpref_dynamics as rd
+##from visualize.by_calling_fq import map_usr_movements as a
+#from analyze.by_simple_subpref_dynamics import save_graph_data as s
+######################################################
+
 #####################################################
-# for CLUSTERING data: radius gyration
+# find and plot user commuting movements to map
 #####################################################
-from read_in import simple_subpref_dynamics as rd
-#from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_simple_subpref_dynamics import save_graph_data as s
+from read_in import fq_data as rd
+from visualize.by_calling_fq import map_usr_movements as v
+from analyze.by_calling_fq import save_graph_data as s
 #####################################################
 
 
@@ -104,8 +112,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    #C = ['A']
+    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    C = ['A']
     
 # ##########################################################
 # # for all interevent times
@@ -317,6 +325,15 @@ def main():
 #        week_data, weekend_data = rd.read_in_file_weekends(c, week_data, weekend_data)
 
 
+#    #######################################################################
+#    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
+#    #######################################################################
+#    # here we save last location (helps calculating) and user traveled distance
+#    G = nx.DiGraph()
+#    
+#    for c in C:
+#        G = rd.read_in_file_2graph(c, G)
+
     #######################################################################
     # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
     #######################################################################
@@ -324,7 +341,7 @@ def main():
     G = nx.DiGraph()
     
     for c in C:
-        G = rd.read_in_file_2graph(c, G)
+        G = rd.read_in_commuting_patterns_all_subprefs(c, G)
 
 
     _log.info("Data loaded.")
@@ -332,6 +349,7 @@ def main():
         raw_input("Press enter to start a process cycle:\n")
         try:
             reload(s)
+            reload(v)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -387,8 +405,8 @@ def main():
             # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save2gml(G)  
-            #s.save_data_to_file(weekend_data) 
+            s.save_commuting_graph(G)  
+            v.map_commutning_all(G) 
             
             ####################################################
             

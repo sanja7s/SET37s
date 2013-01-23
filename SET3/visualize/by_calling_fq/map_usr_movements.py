@@ -327,3 +327,7 @@ def plot_commuting_patterns(G, usr, is_subpref=False):
     return
 
 
+def map_commutning_all():
+    
+    
+    return
