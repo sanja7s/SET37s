@@ -80,9 +80,9 @@ import networkx as nx
 #####################################################
 # for CLUSTERING data: radius gyration
 #####################################################
-from read_in import call_timing_data as rd
+from read_in import simple_subpref_dynamics as rd
 #from visualize.by_calling_fq import map_usr_movements as a
-from analyze.by_call_timing import data_to_file as s
+from analyze.by_simple_subpref_dynamics import save_graph_data as s
 #####################################################
 
 
@@ -321,12 +321,10 @@ def main():
     # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
     #######################################################################
     # here we save last location (helps calculating) and user traveled distance
-    data = defaultdict(int)
-    for subpref in range(256):
-        data[subpref] = defaultdict(int)
+    G = nx.DiGraph()
     
     for c in C:
-        data = rd.read_in_file_weekdays(c, data)
+        G = rd.read_in_file_2graph(c, G)
 
 
     _log.info("Data loaded.")
@@ -389,7 +387,7 @@ def main():
             # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save_data_to_file(data) 
+            s.save2gml(G)  
             #s.save_data_to_file(weekend_data) 
             
             ####################################################
