@@ -303,18 +303,30 @@ def main():
 #    for c in C:
 #        data = rd.read_in_file(c, data)
 
+#    #######################################################################
+#    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
+#    #######################################################################
+#    # here we save last location (helps calculating) and user traveled distance
+#    week_data = defaultdict(int)
+#    weekend_data = defaultdict(int)
+#    for subpref in range(256):
+#        week_data[subpref] = defaultdict(int)
+#        weekend_data[subpref] = defaultdict(int)
+#    
+#    for c in C:
+#        week_data, weekend_data = rd.read_in_file_weekends(c, week_data, weekend_data)
+
+
     #######################################################################
     # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
     #######################################################################
     # here we save last location (helps calculating) and user traveled distance
-    week_data = defaultdict(int)
-    weekend_data = defaultdict(int)
+    data = defaultdict(int)
     for subpref in range(256):
-        week_data[subpref] = defaultdict(int)
-        weekend_data[subpref] = defaultdict(int)
+        data[subpref] = defaultdict(int)
     
     for c in C:
-        week_data, weekend_data = rd.read_in_file_weekends(c, week_data, weekend_data)
+        data = rd.read_in_file_weekdays(c, data)
 
 
     _log.info("Data loaded.")
@@ -377,7 +389,7 @@ def main():
             # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save_data_to_file(weekend_data) 
+            s.save_data_to_file(data) 
             #s.save_data_to_file(weekend_data) 
             
             ####################################################
