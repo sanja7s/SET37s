@@ -404,7 +404,7 @@ def read_in_commuting_patterns_all_subprefs(c, G):
     usr_loc_today = defaultdict(int)
     # helping array
     current_day = defaultdict(int)
-    # we assign empty arrays to our chosen users at start
+    # we assign empty arrays to all our users at start
     for usr in range(500001):
         usr_loc_today[usr] = []
         current_day[usr] = date.today() 
@@ -418,16 +418,19 @@ def read_in_commuting_patterns_all_subprefs(c, G):
         for subpref2 in range(256):
             weekly_patterns[subpref][subpref2] = defaultdict(int)
     
-    # dict with home for each user
+    # dict with home for each user -- just to check how many commutes happen from home
     usr_home_subprefs = read_in_user_home_subprefs()
-    # here we count how many of patters found are from home back to home
+    # here we count how many of patterns found are from home back to home
     count_home_matches = 0
     
+    # this is helping so that the first weekly check is done for each of files c on half date
+    # after that date is passed when reading the file -- we set this to False and do no more checks 
+    # till the end of the file when the new check happens
     weekly_check = True
     
     D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
-    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
-    #file_name = "100Klines.txt"
+    #file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    file_name = "100Klines.txt"
     #file_name= "usr50000.csv"
     f_path = join(D4D_path_SET3,file_name)
     if isfile(f_path) and file_name != '.DS_Store':
@@ -445,33 +448,35 @@ def read_in_commuting_patterns_all_subprefs(c, G):
 #                print current_day[usr]
 #                print call_time.date()
                         
-                # if read in a different day from the one so far, lets finish with the previous one
+                # if read in a different day from the one so far, lets process the previous one
                 if current_day[usr] <> call_time.date():
-                    print current_day[usr]
+                    #print current_day[usr]
                     # this finds possible commuting today for the user usr
                     e = len(usr_loc_today[usr])
-                    print "e " + str(e)
-                    print usr_loc_today[usr]
+                    #print "e " + str(e)
+                    #print usr_loc_today[usr]
+                    # this checks when we found a new pattern to exit the loop (we count only the widest loop pattern) 
                     found_pattern = False
                     for end in range(e-1, 1, -1):
                         last_loc = usr_loc_today[usr][end]
-                        print "Last loc " + str(last_loc)
+                        #print "Last loc " + str(last_loc)
                         for i in range(end-1):
-                            print "\t" + "loc check i " + str(i) + " " + str(usr_loc_today[usr][i])
+                            #print "\t" + "loc check i " + str(i) + " " + str(usr_loc_today[usr][i])
                             if last_loc == usr_loc_today[usr][i]:
                                 found_pattern = True
                                 count_total_daily_patterns += 1
                                 if last_loc == usr_home_subprefs[usr]:
                                     count_home_matches += 1
                                 k = 0
+                                # this is where we save in the weekly_pattern the whole pattern found
                                 while k < end-1:
                                     first_subpref = usr_loc_today[usr][k]
                                     second_subpref = usr_loc_today[usr][k+1]
                                     weekly_patterns[first_subpref][second_subpref][usr] += 1
                                     k += 1
                                 break
-                            if found_pattern:
-                                break
+                        if found_pattern:
+                            break
                     usr_loc_today[usr] = [subpref]
                     current_day[usr] = call_time.date()
                 else:

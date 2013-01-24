@@ -112,8 +112,8 @@ def main():
 ###############################################################
     # this is specific for interevent time calls data
 ##############################################################
-    #C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    C = ['A']
+    C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    CA = ['A']
     
 # ##########################################################
 # # for all interevent times
@@ -342,6 +342,13 @@ def main():
     
     for c in C:
         G = rd.read_in_commuting_patterns_all_subprefs(c, G)
+        
+    ########################################################
+        
+    GA = nx.DiGraph()
+    
+    for c in CA:
+        GA = rd.read_in_commuting_patterns_all_subprefs(c, GA)
 
 
     _log.info("Data loaded.")
@@ -405,8 +412,8 @@ def main():
             # this is for CLUSTERING algorithm TRAJ length
             ####################################################
             #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save_commuting_graph(G)  
-            v.map_commutning_all(G) 
+            s.save_commuting_graph(G, GA)  
+            v.map_commutning_all(G, GA) 
             
             ####################################################
             
