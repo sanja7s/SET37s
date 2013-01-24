@@ -77,5 +77,7 @@ def graph2_file_subpref2(G, subpref):
 
 def save_commuting_graph(G):
     
+    print G.nodes()
+    print G.edges(data=True)
     
     return G

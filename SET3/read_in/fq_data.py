@@ -410,7 +410,7 @@ def read_in_commuting_patterns_all_subprefs(c, G):
         current_day[usr] = date.today() 
     
     # in this matrix we will save all users who made the commuting path in this week
-    # later will function run_weekly_check() count all users who took the path3 times
+    # later will function run_weekly_check() count all users who took the path 3 times at least
     # and only then increase the commuting edges weight
     weekly_patterns = defaultdict()
     for subpref in range(256):
@@ -423,8 +423,12 @@ def read_in_commuting_patterns_all_subprefs(c, G):
     # here we count how many of patters found are from home back to home
     count_home_matches = 0
     
+    weekly_check = True
+    
     D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
     file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    #file_name = "100Klines.txt"
+    #file_name= "usr50000.csv"
     f_path = join(D4D_path_SET3,file_name)
     if isfile(f_path) and file_name != '.DS_Store':
             file7s = open(f_path, 'r')
@@ -434,46 +438,50 @@ def read_in_commuting_patterns_all_subprefs(c, G):
                 subpref = int(subpref)
                 
                 if subpref == -1:
+                    #print "skip -1"
                     continue
                 
                 call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
+#                print current_day[usr]
+#                print call_time.date()
                         
-                # if we are just starting with this user
-                if current_day[usr] == date.today():
-                    current_day[usr] = call_time.date() 
-                    usr_loc_today[usr] = [subpref]
-                else:
                 # if read in a different day from the one so far, lets finish with the previous one
-                    if current_day[usr] <> call_time.date():
-                        # this finds possible commuting today for the user usr
-                        e = len(usr_loc_today[usr])
-                        found_pattern = False
-                        for end in range(e-1, 1, -1):
-                            last_loc = usr_loc_today[usr][end]
-                            for i in range(end-2):
-                                if last_loc == usr_loc_today[usr][i]:
-                                    found_pattern = True
-                                    count_total_daily_patterns += 1
-                                    if last_loc == usr_home_subprefs[usr]:
-                                        count_home_matches += 1
-                                    k = 0
-                                    while k < end-1:
-                                        first_subpref = usr_loc_today[usr][k]
-                                        second_subpref = usr_loc_today[usr][k+1]
-                                        weekly_patterns[first_subpref][second_subpref][usr] += 1
-                                        k += 1
-                                    break
-                                if found_pattern:
-                                    break
-                        usr_loc_today[usr] = [subpref]
-                        current_day[usr] = call_time.date()
-                    else:
-                        last_index =len(usr_loc_today[usr])-1
-                        if usr_loc_today[usr][last_index] <> subpref:
-                            usr_loc_today[usr].append(subpref)
+                if current_day[usr] <> call_time.date():
+                    print current_day[usr]
+                    # this finds possible commuting today for the user usr
+                    e = len(usr_loc_today[usr])
+                    print "e " + str(e)
+                    print usr_loc_today[usr]
+                    found_pattern = False
+                    for end in range(e-1, 1, -1):
+                        last_loc = usr_loc_today[usr][end]
+                        print "Last loc " + str(last_loc)
+                        for i in range(end-1):
+                            print "\t" + "loc check i " + str(i) + " " + str(usr_loc_today[usr][i])
+                            if last_loc == usr_loc_today[usr][i]:
+                                found_pattern = True
+                                count_total_daily_patterns += 1
+                                if last_loc == usr_home_subprefs[usr]:
+                                    count_home_matches += 1
+                                k = 0
+                                while k < end-1:
+                                    first_subpref = usr_loc_today[usr][k]
+                                    second_subpref = usr_loc_today[usr][k+1]
+                                    weekly_patterns[first_subpref][second_subpref][usr] += 1
+                                    k += 1
+                                break
+                            if found_pattern:
+                                break
+                    usr_loc_today[usr] = [subpref]
+                    current_day[usr] = call_time.date()
+                else:
+                    last_index =len(usr_loc_today[usr])-1
+                    if usr_loc_today[usr][last_index] <> subpref:
+                        usr_loc_today[usr].append(subpref)
                 
                 # here we do the check for the week
-                if c == 'A' and call_time.date() > datetime.strptime('2011-12-08', '%Y-%m-%d').date():
+                if c == 'A' and call_time.date() >= datetime.strptime('2011-12-08', '%Y-%m-%d').date() and weekly_check:
+                    weekly_check = False
                     #print weekly_patterns[60]
                     G = run_weekly_check(G, weekly_patterns)
                     weekly_patterns = defaultdict()
@@ -487,13 +495,13 @@ def read_in_commuting_patterns_all_subprefs(c, G):
     print ("Home matches found ", count_home_matches)     
     
     # I think here we will do the second weekly check for the 2weeks period
-    G = run_weekly_check(G)
+    G = run_weekly_check(G, weekly_patterns)
                    
     return G      
 
 
 def run_weekly_check(G, weekly_patterns):
-    
+    #print "Weekly check"
     for subpref1 in weekly_patterns.iterkeys():
         for subpref2 in weekly_patterns[subpref1].iterkeys():
             for usr in weekly_patterns[subpref1][subpref2].iterkeys():
