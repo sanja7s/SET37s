@@ -5,7 +5,7 @@ Created on Jan 23, 2013
 '''
 import networkx as nx
 
-G = nx.read_gml("/home/sscepano/D4D res/allstuff/simple dynamics/gml gephi/mod classes2.gml")
+G = nx.read_gml("/home/sscepano/D4D res/allstuff/simple dynamics/v2/51_79_subpref_mod.gml")
 col = [str]*256
 
 for i in range(256):
@@ -90,7 +90,7 @@ for npoly in range(shp.info()[0]):
     lines.set_linewidth(0.3)
     ax.add_collection(lines)
     
-plt.savefig('/home/sscepano/D4D res/allstuff/simple dynamics/groups_of_subprefs_by_overall_dynamics.png',dpi=1000)
+plt.savefig('/home/sscepano/D4D res/allstuff/simple dynamics/v2/51_79_subpref_mod_groups_of_subprefs_by_overall_dynamics.png',dpi=1000)
 #plt.show()
 
 ###################################################################################################3

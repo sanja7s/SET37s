@@ -6,6 +6,22 @@ Created on Jan 23, 2013
 import networkx as nx
 import matplotlib.pyplot as plt
 from pylab import *
+from collections import defaultdict
+
+def read_in_subpref_num_users():
+    
+    subpref_num_usr = defaultdict(float)
+    
+    file_name = "/home/sscepano/D4D res/ORGANIZED/SET3/Night Homes/Num_of_users_per_home_subpref.tsv"
+    f = open(file_name, 'r')
+    
+    for line in f:
+        subpref, num_usr = line.split('\t')
+        subpref =  int(subpref[:-1])
+        num_usr = int(num_usr)
+        subpref_num_usr[subpref] = num_usr
+             
+    return subpref_num_usr        
 
 def save2gml(G):
     
@@ -46,3 +62,24 @@ def save2gml(G):
     
     
     return
+
+def reprocess_gml():
+    
+    #G = nx.DiGraph()
+    G = nx.read_gml("/home/sscepano/D4D res/allstuff/simple dynamics/v1/subpref_total_movements_cleaned.gml")
+    
+    num_usr = read_in_subpref_num_users()
+    
+    for edge in G.edges(data=True):
+        subpref1 = edge[0]
+        subpref2 = edge[1]
+        if num_usr[subpref1] > 0 and num_usr[subpref2] > 0:
+            edge[2]['weight'] /= (float(num_usr[subpref1])*float(num_usr[subpref2])) * 100
+        
+    nx.write_gml(G, "/home/sscepano/D4D res/allstuff/simple dynamics/v2/subpref_total_movements_scaled2.gml")
+    
+    return G
+
+
+
+#reprocess_gml()
