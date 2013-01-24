@@ -429,8 +429,8 @@ def read_in_commuting_patterns_all_subprefs(c, G):
     weekly_check = True
     
     D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
-    #file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
-    file_name = "100Klines.txt"
+    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    #file_name = "100Klines.txt"
     #file_name= "usr50000.csv"
     f_path = join(D4D_path_SET3,file_name)
     if isfile(f_path) and file_name != '.DS_Store':
@@ -485,15 +485,25 @@ def read_in_commuting_patterns_all_subprefs(c, G):
                         usr_loc_today[usr].append(subpref)
                 
                 # here we do the check for the week
-                if c == 'A' and call_time.date() >= datetime.strptime('2011-12-08', '%Y-%m-%d').date() and weekly_check:
-                    weekly_check = False
-                    #print weekly_patterns[60]
-                    G = run_weekly_check(G, weekly_patterns)
-                    weekly_patterns = defaultdict()
-                    for subpref in range(256):
-                        weekly_patterns[subpref] = defaultdict()
-                        for subpref2 in range(256):
-                            weekly_patterns[subpref][subpref2] = defaultdict(int)
+                if weekly_check:
+                    if c == 'A' and call_time.date() >= datetime.strptime('2011-12-08', '%Y-%m-%d').date() \
+                    or c == 'B' and call_time.date() >= datetime.strptime('2011-12-22', '%Y-%m-%d').date() \
+                    or c == 'C' and call_time.date() >= datetime.strptime('2012-01-05', '%Y-%m-%d').date() \
+                    or c == 'D' and call_time.date() >= datetime.strptime('2012-01-19', '%Y-%m-%d').date() \
+                    or c == 'E' and call_time.date() >= datetime.strptime('2012-02-02', '%Y-%m-%d').date() \
+                    or c == 'F' and call_time.date() >= datetime.strptime('2012-02-16', '%Y-%m-%d').date() \
+                    or c == 'G' and call_time.date() >= datetime.strptime('2012-03-01', '%Y-%m-%d').date() \
+                    or c == 'H' and call_time.date() >= datetime.strptime('2012-03-15', '%Y-%m-%d').date() \
+                    or c == 'I' and call_time.date() >= datetime.strptime('2012-03-29', '%Y-%m-%d').date() \
+                    or c == 'J' and call_time.date() >= datetime.strptime('2012-04-12', '%Y-%m-%d').date():
+                        weekly_check = False
+                        #print weekly_patterns[60]
+                        G = run_weekly_check(G, weekly_patterns)
+                        weekly_patterns = defaultdict()
+                        for subpref in range(256):
+                            weekly_patterns[subpref] = defaultdict()
+                            for subpref2 in range(256):
+                                weekly_patterns[subpref][subpref2] = defaultdict(int)
 
                         
     print ("Total patterns found ", count_total_daily_patterns)
