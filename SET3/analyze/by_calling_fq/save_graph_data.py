@@ -7,6 +7,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from pylab import *
 
+from visualize.by_calling_fq import map_usr_movements as v
+
 def graph2_file2(G, usr):
     # this one is for patterns
     
@@ -75,9 +77,18 @@ def graph2_file_subpref2(G, subpref):
     return
 
 
-def save_commuting_graph(G):
+def save_commuting_graph(G, GA):
     
-    print G.nodes()
-    print G.edges(data=True)
+#    print G.nodes()
+#    print G.edges(data=True)
+#    
+#    nx.write_gml(G, "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/1/total_commuting_G.gml")
+#    
+#    print GA.nodes()
+#    print GA.edges(data=True)
+#    
+#    nx.write_gml(G, "/home/sscepano/D4D res/allstuff/User movements graphs/communting patterns/1/total_commuting_GA.gml")
+
+    #v.map_commuting_all(G)
     
     return G
