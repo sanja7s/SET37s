@@ -85,12 +85,20 @@ import networkx as nx
 #from analyze.by_simple_subpref_dynamics import save_graph_data as s
 ######################################################
 
+######################################################
+## find and plot user commuting movements to map
+######################################################
+#from read_in import fq_data as rd
+#from visualize.by_calling_fq import map_usr_movements as v
+#from analyze.by_calling_fq import save_graph_data as s
+######################################################
+
+
 #####################################################
-# find and plot user commuting movements to map
+# fq of calls in subpref not based on home users
 #####################################################
-from read_in import fq_data as rd
-from visualize.by_calling_fq import map_usr_movements as v
-from analyze.by_calling_fq import save_graph_data as s
+from read_in import subpref_fq_not_only_home as rd
+from analyze.by_calling_fq import save_subpref_fq as s
 #####################################################
 
 
@@ -334,29 +342,36 @@ def main():
 #    for c in C:
 #        G = rd.read_in_file_2graph(c, G)
 
-    #######################################################################
-    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
-    #######################################################################
-    # here we save last location (helps calculating) and user traveled distance
-    G = nx.DiGraph()
-    
-    for c in C:
-        G = rd.read_in_commuting_patterns_all_subprefs(c, G)
-        
-    ########################################################
-        
-    GA = nx.DiGraph()
-    
-    for c in CA:
-        GA = rd.read_in_commuting_patterns_all_subprefs(c, GA)
+#    #######################################################################
+#    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
+#    #######################################################################
+#    # here we save last location (helps calculating) and user traveled distance
+#    G = nx.DiGraph()
+#    
+#    for c in C:
+#        G = rd.read_in_commuting_patterns_all_subprefs(c, G)
+#        
+#    ########################################################
+#        
+#    GA = nx.DiGraph()
+#    
+#    for c in CA:
+#        GA = rd.read_in_commuting_patterns_all_subprefs(c, GA)
 
+    #######################################################################
+    # this is for finding CLUSTERING argument fq of calls in the subpref (not calculated only from the home users!!!)
+    #######################################################################
+    
+    data = defaultdict(int)
+    for c in C:
+        data = rd.read_in_file(c, data)
+    
 
     _log.info("Data loaded.")
     while True:
         raw_input("Press enter to start a process cycle:\n")
         try:
             reload(s)
-            reload(v)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -408,14 +423,20 @@ def main():
 #            
 #            ####################################################
 
-            ####################################################
-            # this is for CLUSTERING algorithm TRAJ length
-            ####################################################
-            #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
-            s.save_commuting_graph(G, GA)  
-            v.map_commutning_all(G, GA) 
-            
-            ####################################################
+#            ####################################################
+#            # this is for CLUSTERING algorithm TRAJ length
+#            ####################################################
+#            #s.save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr)
+#            s.save_commuting_graph(G, GA)  
+#            v.map_commutning_all(G, GA) 
+#            
+#            ####################################################
+
+#            ####################################################
+            #  subpref fq not only from home
+#            ####################################################
+            s.data_2_file(data)
+
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))

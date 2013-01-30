@@ -144,5 +144,5 @@ for npoly in range(shp.info()[0]):
     ax.add_collection(lines)
 
     
-plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/maps/grayscale_pct_home_c_map2.png',dpi=1000)
-#plt.show()
+#plt.savefig('/home/sscepano/D4D res/allstuff/CLUSTERING/subpref res/maps/grayscale_pct_home_c_map2.png',dpi=1000)
+plt.show()

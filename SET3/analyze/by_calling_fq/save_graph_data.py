@@ -104,7 +104,9 @@ def map_communities_and_commutes(G):
         col_gephi = node[1]['graphics']['fill']
         while (len(col_gephi) < 7):
             col_gephi += '0'
-        col[int(float(node[1]['label']))] = col_gephi   
+        subpref_gephi = int(float(node[1]['label']))
+        print subpref_gephi, col_gephi
+        col[subpref_gephi] = col_gephi   
     #print col
     
     plt.clf()
@@ -159,99 +161,101 @@ def map_communities_and_commutes(G):
         ax.add_collection(lines)
     
     m.drawcoastlines()
+    
+    plt.show()
 
-    # data to plot on the map    
-    lons = [int]*256
-    lats = [int]*256
-    
-    # read in coordinates fo subprefs
-    file_name2 = "/home/sscepano/DATA SET7S/D4D/SUBPREF_POS_LONLAT.TSV"
-    f2 = open(file_name2, 'r')
-    
-    # read subpref coordinates
-    subpref_coord = {}
-    for line in f2:
-        subpref_id, lon, lat = line.split('\t')
-        lon = float(lon)
-        lat = float(lat)
-        subpref_id = int(subpref_id)
-        subpref_coord.keys().append(subpref_id)
-        subpref_coord[subpref_id] = (lon, lat)
-    
-    f2.close()
-    
-    # if wanna plot number of users whose this is home subpref
-    for subpref in range(1,256):
-        lons[subpref] = subpref_coord[subpref][0]
-        lats[subpref] = subpref_coord[subpref][1]
-    
-    
-    if G.has_node(-1): 
-        G.remove_node(-1)
-
-    max7s = 1
-    min7s = 1
-    for u,v,d in G.edges(data=True):
-        if d['weight'] > max7s:
-            max7s = d['weight']
-        if d['weight'] < min7s:
-            min7s = d['weight']
-            
-    max7s = float(max7s)
-    print max7s
-    print min7s
-    
-    scaled_weight = defaultdict(int)
-    for i in range(256):
-        scaled_weight[i] = defaultdict(int)
-    
-    for u,v,d in G.edges(data=True):
-        node1 = G.nodes(data=True)[u][1]['label']
-        node2 = G.nodes(data=True)[v][1]['label']
-        print u, node1
-        print v, node2
-        print d
-        scaled_weight[node1][node2] = (d['weight'] - min7s) / (max7s - min7s)
-        
+#    # data to plot on the map    
+#    lons = [int]*256
+#    lats = [int]*256
+#    
+#    # read in coordinates fo subprefs
+#    file_name2 = "/home/sscepano/DATA SET7S/D4D/SUBPREF_POS_LONLAT.TSV"
+#    f2 = open(file_name2, 'r')
+#    
+#    # read subpref coordinates
+#    subpref_coord = {}
+#    for line in f2:
+#        subpref_id, lon, lat = line.split('\t')
+#        lon = float(lon)
+#        lat = float(lat)
+#        subpref_id = int(subpref_id)
+#        subpref_coord.keys().append(subpref_id)
+#        subpref_coord[subpref_id] = (lon, lat)
+#    
+#    f2.close()
+#    
+#    # if wanna plot number of users whose this is home subpref
+#    for subpref in range(1,256):
+#        lons[subpref] = subpref_coord[subpref][0]
+#        lats[subpref] = subpref_coord[subpref][1]
+#    
+#    
+#    if G.has_node(-1): 
+#        G.remove_node(-1)
+#
+#    max7s = 1
+#    min7s = 1
 #    for u,v,d in G.edges(data=True):
-#        print u,v,d
+#        if d['weight'] > max7s:
+#            max7s = d['weight']
+#        if d['weight'] < min7s:
+#            min7s = d['weight']
+#            
+#    max7s = float(max7s)
+#    print max7s
+#    print min7s
+#    
+#    scaled_weight = defaultdict(int)
+#    for i in range(256):
+#        scaled_weight[i] = defaultdict(int)
+#    
+#    for u,v,d in G.edges(data=True):
 #        node1 = G.nodes(data=True)[u][1]['label']
 #        node2 = G.nodes(data=True)[v][1]['label']
-#        print node1, G_mod.nodes(data=True)[u][1]['label']
-#        print node2, G_mod.nodes(data=True)[v][1]['label']
-    
- 
-    for u, v, d in G.edges(data=True):
-        node1 = G.nodes(data=True)[u][1]['label']
-        node2 = G.nodes(data=True)[v][1]['label']
-        print node1
-        print node2
-        lo = []
-        la = []   
-        print u
-        print v
-        lo.append(lons[node1])
-        lo.append(lons[node2])
-        la.append(lats[node1])
-        la.append(lats[node2])
-        #m.drawgreatcircle(lons[u],lats[u], lons[v],lats[v])
-        x, y = m(lo, la)
-        #linewidth7s = d['weight']
-        #linewidth7s = d['weight'] / max7s
-        #lons, lats = n.meshgrid(lo,la)
-        linewidth7s = scaled_weight[node1][node2] * 7 + 0.2
-        m.plot(x,y, 'b', linewidth = linewidth7s)
-        #wave = 0.75*(np.sin(2.*lats)**8*np.cos(4.*lons))
-        #mean = 0.5*np.cos(2.*lats)*((np.sin(2.*lats))**2 + 2.)
-        #m.contour(x,y,linewidth=linewidth7s)
-        #m.quiver(x,y,lons, lats, latlon=True)
-#        if linewidth7s > 1:
-#            print linewidth7s
-        
-     
-    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/commuting patterns/1/maps/mod_classes_SCALED_11COM_713_7115.png"
-    print(figure_name)
-    plt.savefig(figure_name, format = "png",dpi=1000) 
+#        print u, node1
+#        print v, node2
+#        print d
+#        scaled_weight[node1][node2] = (d['weight'] - min7s) / (max7s - min7s)
+#        
+##    for u,v,d in G.edges(data=True):
+##        print u,v,d
+##        node1 = G.nodes(data=True)[u][1]['label']
+##        node2 = G.nodes(data=True)[v][1]['label']
+##        print node1, G_mod.nodes(data=True)[u][1]['label']
+##        print node2, G_mod.nodes(data=True)[v][1]['label']
+#    
+# 
+#    for u, v, d in G.edges(data=True):
+#        node1 = G.nodes(data=True)[u][1]['label']
+#        node2 = G.nodes(data=True)[v][1]['label']
+#        print node1
+#        print node2
+#        lo = []
+#        la = []   
+#        print u
+#        print v
+#        lo.append(lons[node1])
+#        lo.append(lons[node2])
+#        la.append(lats[node1])
+#        la.append(lats[node2])
+#        #m.drawgreatcircle(lons[u],lats[u], lons[v],lats[v])
+#        x, y = m(lo, la)
+#        #linewidth7s = d['weight']
+#        #linewidth7s = d['weight'] / max7s
+#        #lons, lats = n.meshgrid(lo,la)
+#        linewidth7s = scaled_weight[node1][node2] * 7 + 0.2
+#        m.plot(x,y, 'b', linewidth = linewidth7s)
+#        #wave = 0.75*(np.sin(2.*lats)**8*np.cos(4.*lons))
+#        #mean = 0.5*np.cos(2.*lats)*((np.sin(2.*lats))**2 + 2.)
+#        #m.contour(x,y,linewidth=linewidth7s)
+#        #m.quiver(x,y,lons, lats, latlon=True)
+##        if linewidth7s > 1:
+##            print linewidth7s
+#        
+#     
+#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/commuting patterns/1/maps/mod_classes_SCALED_11COM_713_7115.png"
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png",dpi=1000) 
     
     return
 
