@@ -13,6 +13,14 @@ import matplotlib.colors as colors
 import matplotlib.cm as cm
 from math import log
 
+def plot_movements3(G):
+    
+    return
+
+def plot_movements2(G, usr):
+    
+    return
+
 def plot_movements(G, subpref):
     
     subpref_str =  str(subpref)

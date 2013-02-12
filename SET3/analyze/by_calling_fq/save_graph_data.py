@@ -11,6 +11,9 @@ import numpy as np
 from visualize.by_calling_fq import map_usr_movements as v
 from visualize.by_commuting_patterns import map_commutes as v2
 
+from read_in import fq_data as rd
+from read_in import  gSpan_res as rd2
+
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -22,25 +25,368 @@ from math import log
 
 from collections import defaultdict
 
+from mpl_toolkits.basemap import Basemap
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.rcParams['font.size'] = 5.5
+import networkx as nx
+import matplotlib.colors as colors
+import matplotlib.cm as cm
+from math import log
+
+from collections import defaultdict
+
+def plot_gspan_res(G, color_val):
+    
+    m = Basemap(llcrnrlon=-9, \
+                llcrnrlat=3.8, \
+                urcrnrlon=-1.5, \
+                urcrnrlat = 11, \
+                resolution = 'h', \
+                projection = 'tmerc', \
+                lat_0 = 7.38, \
+                lon_0 = -5.30)
+   
+    # read the shapefile archive
+    s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
+    
+    m.drawcoastlines()
+
+    # data to plot on the map    
+    lons = [int]*256
+    lats = [int]*256
+    num = []
+    
+    # read in coordinates fo subprefs
+    file_name2 = "/home/sscepano/DATA SET7S/D4D/SUBPREF_POS_LONLAT.TSV"
+    f2 = open(file_name2, 'r')
+    
+    # read subpref coordinates
+    subpref_coord = {}
+    for line in f2:
+        subpref_id, lon, lat = line.split('\t')
+        lon = float(lon)
+        lat = float(lat)
+        subpref_id = int(subpref_id)
+        subpref_coord.keys().append(subpref_id)
+        subpref_coord[subpref_id] = (lon, lat)
+    
+    f2.close()
+    
+    # if wanna plot number of users whose this is home subpref
+    for subpref in range(1,256):
+        lons[subpref] = subpref_coord[subpref][0]
+        lats[subpref] = subpref_coord[subpref][1]
+    
+
+    for u, v, d in G.edges(data=True):
+        lo = []
+        la = []   
+        lo.append(lons[u])
+        lo.append(lons[v])
+        la.append(lats[u])
+        la.append(lats[v])
+        x, y = m(lo, la)
+        m.plot(x,y, color = color_val)
+           
+#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/gSpan res/238.png" 
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png")  
+
+    return plt
+
+def gspan_res():
+    
+    subpref_id = 159
+    
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as colors
+    import matplotlib.cm as cmx
+    import numpy as np
+    
+    # define some random data that emulates your indeded code:
+    NCURVES = 100
+    np.random.seed(101)
+    values = range(NCURVES)
+    
+    jet = cm = plt.get_cmap('jet') 
+    cNorm  = colors.Normalize(vmin=0, vmax=values[-1])
+    scalarMap = cmx.ScalarMappable(norm=cNorm, cmap=jet)
+    print scalarMap.get_clim()
+
+    file_name = "/home/sscepano/gSpan7s/all_users_" + str(subpref_id) + ".tsv.fp"
+    f = open(file_name, "r")
+    
+    G = nx.DiGraph()
+    
+    
+    idx = 0
+    
+    for line in f:
+        elems = line.split(' ')
+        
+        if elems[0] == 't':
+            color_val = scalarMap.to_rgba(values[idx])
+            plt = plot_gspan_res(G, color_val)
+            G = nx.DiGraph()
+            node_labels = defaultdict(int)
+            idx += 1
+            continue
+        
+        if elems[0] == 'v':
+            node_labels[int(elems[1])] = int(elems[2])
+            continue
+            
+        if elems[0] == 'e':
+            G.add_edge(node_labels[int(elems[1])], node_labels[int(elems[2])])
+            
+     
+    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/gSpan res/" + str(subpref_id) + ".png" 
+    print(figure_name)
+    plt.savefig(figure_name, format = "png", dpi = 500)   
+     
+    return
+
+def graph2_file3(G):
+    
+#    movements_stats = np.zeros(500001)
+#    
+#    for i in range(500001):
+#        for u,v,d in G[i].edges(data=True):
+#            movements_stats[i] += d['weight']
+#    
+#    fig2 = plt.figure(2)
+#    ax = fig2.add_subplot(111)
+#    nn, bins, rectangles = ax.hist(movements_stats, 100, normed=True)
+#    
+#    plt.xlabel('# of movements')
+#    plt.ylabel('fq of # num movements')
+#    plt.legend()   
+##    plt.yscale('log')
+##    plt.xscale('log')
+#    
+#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/usr_movements_hist.png" 
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png")  
+#    plt.show() 
+    
+#    file_name = "movements_fq.tsv"
+#    f = open(file_name, 'w')
+    
+#    for i in range(len(movements_stats)):
+#        f.write(str(i) + '\t' + str(movements_stats2[i]) + '\n')
+
+#    for subpref_id in range(255):
+#
+#        #subpref_id = 237
+#    
+#        usrs_list = rd.read_in_subpref_users(subpref_id)
+#        
+#        file_name2 = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/subpref/all_users_" + str(subpref_id) + ".tsv"
+#        f2 = open(file_name2, "w")
+#        j = 0
+#        
+#        for i in range(500001):
+#            if usrs_list[i] == 1:
+#                j += 1
+#                f2.write('t # ' + str(j) + '\n')
+#                
+#                max_node = 0
+#                min_node = 256
+#                
+#                nodes_order = defaultdict(int)
+#                
+#                cnt = 0
+#                
+#                for node in G[i].nodes():
+#                    if node <> -1:
+#                        if node > max_node:
+#                            max_node = node
+#                        if node < min_node:
+#                            min_node = node
+#                        nodes_order[node] = cnt
+#                        cnt += 1 
+#                            
+#                
+#                for node in G[i].nodes():
+#                    if node <> -1:
+#                        f2.write('v ' + str(nodes_order[node]) + ' ' + str(node) + '\n')
+#                
+#                for u,v,d in G[i].edges(data=True):
+#                    if u <> - 1 and v <> -1 and u <> v:
+#                        if d['weight'] <= 10:
+#                            weight = 0
+#                        elif d['weight'] <= 100:
+#                            weight = 10
+#                        elif d['weight'] <= 1000:
+#                            weight = 100
+#                        elif d['weight'] <= 10000:
+#                            weight = 1000
+#                        else:
+#                            weight = 10000
+#                        f2.write('e ' + str(nodes_order[u]) + ' ' + str(nodes_order[v]) + ' ' + str(weight) + '\n')
+#                
+#        print j
+
+#    file_name3 = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/subpref/all_users.tsv"
+#    f3 = open(file_name3, "w")
+#
+#    j = 0
+#    for i in range(500001):
+#            j += 1
+#            f3.write('t # ' + str(j) + '\n')
+#            
+#            max_node = 0
+#            min_node = 256
+#            
+#            nodes_order = defaultdict(int)
+#            
+#            cnt = 0
+#            
+#            for node in G[i].nodes():
+#                if node <> -1:
+#                    if node > max_node:
+#                        max_node = node
+#                    if node < min_node:
+#                        min_node = node
+#                    nodes_order[node] = cnt
+#                    cnt += 1 
+#                        
+#            
+#            for node in G[i].nodes():
+#                if node <> -1:
+#                    f3.write('v ' + str(nodes_order[node]) + ' ' + str(node) + '\n')
+#            
+#            for u,v,d in G[i].edges(data=True):
+#                if u <> - 1 and v <> -1 and u <> v:
+#                    if d['weight'] <= 10:
+#                        weight = 0
+#                    elif d['weight'] <= 100:
+#                        weight = 10
+#                    elif d['weight'] <= 1000:
+#                        weight = 100
+#                    elif d['weight'] <= 10000:
+#                        weight = 1000
+#                    else:
+#                        weight = 10000
+#                    f3.write('e ' + str(nodes_order[u]) + ' ' + str(nodes_order[v]) + ' ' + str(weight) + '\n')
+#            
+#    print j
+
+#    minval = 1
+#    maxval = 1
+#
+#    distr_num_of_edges = np.zeros(500001)
+#    
+#    for i in range(500001):
+#        testval = G[i].number_of_edges()
+#        if minval > testval:
+#            minval = testval
+#        if maxval < testval:
+#            maxval = testval
+#        distr_num_of_edges[i] = testval
+#            
+#    print minval
+#    print maxval
+#    
+#    print distr_num_of_edges
+#    
+#    for i in range(500001):
+#        testval = G[i].number_of_edges()
+#        
+#        if testval <= 10:
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/low_movers.tsv",G[i], i)
+#        elif testval <= 100:
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/medium_movers.tsv",G[i], i)
+#        else:
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/high_movers.tsv",G[i], i)
+    
+#    fig3 = plt.figure(3)
+#    ax = fig3.add_subplot(111) 
+#    nn, bins, rectangles = ax.hist(distr_num_of_edges, 100, normed=True)
+#    
+#    plt.xlabel('# of edges')
+#    plt.ylabel('fq of # num edges')
+#    plt.legend()   
+#    plt.yscale('log')
+#    plt.xscale('log')
+#    
+#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/usr_edges_loglog.png" 
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png")  
+#    plt.show() 
+
+    #rd2.gspan_res()
+    
+    gspan_res()
+    
+    return
+
+def save_users_graphs_for_input_gspan(file_name, G, j):
+
+    f3 = open(file_name, "a")
+    f3.write('t # ' + str(j) + '\n')
+    
+    max_node = 0
+    min_node = 256
+    
+    nodes_order = defaultdict(int)
+    
+    cnt = 0
+    
+    for node in G.nodes():
+        if node <> -1:
+            if node > max_node:
+                max_node = node
+            if node < min_node:
+                min_node = node
+            nodes_order[node] = cnt
+            cnt += 1 
+                
+    
+    for node in G.nodes():
+        if node <> -1:
+            f3.write('v ' + str(nodes_order[node]) + ' ' + str(node) + '\n')
+    
+    for u,v,d in G.edges(data=True):
+        if u <> - 1 and v <> -1 and u <> v:
+            if d['weight'] <= 10:
+                weight = 0
+            elif d['weight'] <= 100:
+                weight = 10
+            elif d['weight'] <= 1000:
+                weight = 100
+            elif d['weight'] <= 10000:
+                weight = 1000
+            else:
+                weight = 10000
+            f3.write('e ' + str(nodes_order[u]) + ' ' + str(nodes_order[v]) + ' ' + str(weight) + '\n')
+    
+    return
+
 def graph2_file2(G, usr):
+    
+  
     # this one is for patterns
     
-    fig = figure()
-    axes = fig.add_subplot(111)
+#    fig = figure()
+#    axes = fig.add_subplot(111)
     
-    nx.write_gml(G, "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/usr_movements_" + str(usr) + ".gml")
+    #nx.write_gml(G, "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/1/usr_movements_" + str(usr) + ".gml")
     
-    pos=nx.spring_layout(G) 
-    nx.draw(G, pos, ax=axes)
-    edge_labels=dict([((u,v,),d['weight'])
-        for u,v,d in G.edges(data=True)])
-    nx.draw_networkx_edge_labels(G, pos, edge_labels,  ax=axes)
+#    pos=nx.spring_layout(G) 
+#    nx.draw(G, pos, ax=axes)
+#    edge_labels=dict([((u,v,),d['weight'])
+#        for u,v,d in G.edges(data=True)])
+#    nx.draw_networkx_edge_labels(G, pos, edge_labels,  ax=axes)
     
     #plt.show()
     
-    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/usr_movements_" + str(usr) + ".png" 
-    print(figure_name)
-    plt.savefig(figure_name, format = "png")    
+#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/usr_movements_" + str(usr) + ".png" 
+#    print(figure_name)
+#    plt.savefig(figure_name, format = "png")    
+    
+  
     
     return
 
@@ -324,4 +670,6 @@ def process_weights(G):
     return G1
 
 
-save_commuting_graph()
+
+
+#save_commuting_graph()

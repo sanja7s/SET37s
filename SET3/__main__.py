@@ -94,11 +94,19 @@ import networkx as nx
 ######################################################
 
 
+######################################################
+## fq of calls in subpref not based on home users
+######################################################
+#from read_in import subpref_fq_not_only_home as rd
+#from analyze.by_calling_fq import save_subpref_fq as s
+######################################################
+
 #####################################################
-# fq of calls in subpref not based on home users
+# find and plot user commuting movements to map
 #####################################################
-from read_in import subpref_fq_not_only_home as rd
-from analyze.by_calling_fq import save_subpref_fq as s
+from read_in import fq_data as rd
+from visualize.by_calling_fq import map_usr_movements as v
+from analyze.by_calling_fq import save_graph_data as s
 #####################################################
 
 
@@ -121,7 +129,7 @@ def main():
     # this is specific for interevent time calls data
 ##############################################################
     C = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-    CA = ['A']
+    #CA = ['A']
     
 # ##########################################################
 # # for all interevent times
@@ -358,13 +366,21 @@ def main():
 #    for c in CA:
 #        GA = rd.read_in_commuting_patterns_all_subprefs(c, GA)
 
-    #######################################################################
-    # this is for finding CLUSTERING argument fq of calls in the subpref (not calculated only from the home users!!!)
-    #######################################################################
+#    #######################################################################
+#    # this is for finding CLUSTERING argument fq of calls in the subpref (not calculated only from the home users!!!)
+#    #######################################################################
+#    
+#    data = defaultdict(int)
+#    for c in C:
+#        data = rd.read_in_file(c, data)
+
+    G = defaultdict(int)
     
-    data = defaultdict(int)
+    for i in range(500001):
+        G[i] = nx.DiGraph()
+
     for c in C:
-        data = rd.read_in_file(c, data)
+        G = rd.read_in_file_2graph_all_usrs_separate(c,G)
     
 
     _log.info("Data loaded.")
@@ -372,6 +388,7 @@ def main():
         raw_input("Press enter to start a process cycle:\n")
         try:
             reload(s)
+            reload(v)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -432,10 +449,19 @@ def main():
 #            
 #            ####################################################
 
-#            ####################################################
-            #  subpref fq not only from home
-#            ####################################################
-            s.data_2_file(data)
+##            ####################################################
+#            #  subpref fq not only from home
+##            ####################################################
+#            s.data_2_file(data)
+            for i in range(500001):
+                s.graph2_file2(G[i],i)
+            
+            for i in range(500001):    
+                v.plot_movements2(G[i], i) 
+                
+            s.graph2_file3(G) 
+            
+            v.plot_movements3(G) 
 
             
         except Exception as e:
