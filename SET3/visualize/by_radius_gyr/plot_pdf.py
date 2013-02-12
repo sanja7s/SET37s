@@ -7,6 +7,10 @@ Created on Jan 20, 2013
 import pyplot as plt
 import numpy as nn
 
+from collections import defaultdict, OrderedDict
+
+from read_in import fq_data as rd
+
 def from_file_radius_gyr(file_name): 
    
     usr_rg = nn.zeros(500001)
@@ -112,4 +116,155 @@ def from_file_radius_gyr(file_name):
     return   
 
 # invoke the function for plotting number of calls and frequency probability distribution (percents of users)
-from_file_radius_gyr("/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_radius_gyration.tsv")
+#from_file_radius_gyr("/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_radius_gyration.tsv")
+
+def from_file_radius_gyr2(file_name):
+    
+    nits = []
+    its = []
+    
+    # a loop where we populate those two arrays from the file
+    i = 0
+    f = open(file_name, 'r')    
+    # read the file
+    for line in f:
+        i = i + 1
+        it, nit = line.split('\t')
+        nit = float(nit)
+        it = int(it)
+        nit = int(nit)
+        nits.append(nit)
+        its.append(it)
+
+    mi = min(nits)
+    mx = max(nits)
+    print("Minimum radius of gyr ", mi)
+    print("Maximum radius of gyr ", mx)
+    
+    total_nit = float(sum(nits))
+    print("Total radius of gyr ", total_nit)
+    
+    pdf_nits = defaultdict(int)
+    
+    for j in range(0, len(nits)):
+        pdf_nits[nits[j]] += 1
+        
+    ordered = OrderedDict(sorted(pdf_nits.items(), key=lambda t: t[0]))
+    
+    nits7s = []
+    its7s = []
+    
+    test = 0
+    
+    for j in ordered.iterkeys():
+        nits7s.append(ordered[j]/500000.0)
+        test += ordered[j]/500000.0
+        its7s.append(j)
+        
+    print test
+        
+############################################################################################################################
+# THIS is to plot number of users pdf
+############################################################################################################################
+
+    plt.figure(7)
+
+    plt.plot(its7s, nits7s, 'o', linewidth=0.5, label= 'distribution of Rg')
+    
+    plt.xlabel('rg [km]')
+    plt.ylabel('P(rg)')
+    plt.legend()   
+    
+    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+    plt.yscale('log')
+    plt.xscale('log')
+    figure_name = "/home/sscepano/D4D res/allstuff/rg/1/rg_total.png"
+          
+    print(figure_name)
+    plt.savefig(figure_name, format = "png", dpi=300)      
+    
+    return
+
+#from_file_radius_gyr2("/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_radius_gyration.tsv")
+
+
+def from_file_radius_gyr3(file_name, subpref):
+    
+    users_list = rd.read_in_subpref_users(subpref)
+    
+    total = float(rd.read_in_subpref_num_users()[subpref])
+    
+    if total > 0:
+    
+        nits = []
+        its = []
+        
+        # a loop where we populate those two arrays from the file
+        i = 0
+        f = open(file_name, 'r')    
+        # read the file
+        for line in f:
+            i = i + 1
+            it, nit = line.split('\t')
+            nit = float(nit)
+            it = int(it)
+            if users_list[it] == 1:
+                nit = int(nit)
+                nits.append(nit)
+                its.append(it)
+    
+        mi = min(nits)
+        mx = max(nits)
+        print("Minimum radius of gyr ", mi)
+        print("Maximum radius of gyr ", mx)
+        
+        total_nit = float(sum(nits))
+        print("Total radius of gyr ", total_nit)
+        
+        pdf_nits = defaultdict(int)
+        
+        for j in range(0, len(nits)):
+            pdf_nits[nits[j]] += 1
+            
+        ordered = OrderedDict(sorted(pdf_nits.items(), key=lambda t: t[0]))
+        
+        nits7s = []
+        its7s = []
+        
+        test = 0
+        #total = 500000.0
+        
+        for j in ordered.iterkeys():
+            nits7s.append(ordered[j]/total)
+            test += ordered[j]/total
+            its7s.append(j)
+            
+        print test
+            
+    ############################################################################################################################
+    # THIS is to plot number of users pdf
+    ############################################################################################################################
+    
+        plt.figure(7)
+    
+        plt.plot(its7s, nits7s, 'o', linewidth=0.5, label= 'distribution of Rg')
+        
+        plt.xlabel('rg [km]')
+        plt.ylabel('P(rg)')
+        plt.legend()   
+        
+        # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
+        plt.yscale('log')
+        plt.xscale('log')
+        figure_name = "/home/sscepano/D4D res/allstuff/rg/1/rg_" + str(subpref) + ".png"
+              
+        print(figure_name)
+        plt.savefig(figure_name, format = "png", dpi=300)      
+        
+        plt.clf()
+    
+    return
+
+
+for i in range (33,255):
+    from_file_radius_gyr3("/home/sscepano/D4D res/ORGANIZED/SET3/Clustering/usr res/usr_radius_gyration.tsv", i)
