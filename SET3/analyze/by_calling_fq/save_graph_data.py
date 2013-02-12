@@ -36,7 +36,17 @@ from math import log
 
 from collections import defaultdict
 
-def plot_gspan_res(G, color_val):
+from shapelib import ShapeFile
+import dbflib
+from matplotlib.collections import LineCollection
+from matplotlib import cm
+
+def plot_gspan_res(G, subpref_id, color_val):
+    
+    fig = plt.figure(subpref_id)
+    #Custom adjust of the subplots
+    plt.subplots_adjust(left=0.05,right=0.95,top=0.90,bottom=0.05,wspace=0.15,hspace=0.05)
+    ax = plt.subplot(111)
     
     m = Basemap(llcrnrlon=-9, \
                 llcrnrlat=3.8, \
@@ -51,6 +61,43 @@ def plot_gspan_res(G, color_val):
     s = m.readshapefile('/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE', 'subpref')
     
     m.drawcoastlines()
+    
+    shp = ShapeFile(r'/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE')
+    dbf = dbflib.open(r'/home/sscepano/DATA SET7S/D4D/SubPrefecture/GEOM_SOUS_PREFECTURE')
+    
+    msg = "Out of bounds"
+    color_col = []
+    
+    for npoly in range(shp.info()[0]):
+        shpsegs = []
+        shpinfo = []
+        
+        
+        shp_object = shp.read_object(npoly)
+        verts = shp_object.vertices()
+        rings = len(verts)
+        for ring in range(rings):
+            lons, lats = zip(*verts[ring])
+            x, y = m(lons, lats)
+            shpsegs.append(zip(x,y))
+            if ring == 0:
+                shapedict = dbf.read_record(npoly)
+            #print shapedict
+            name = shapedict["ID_DEPART"]
+            subpref_id2 = shapedict["ID_SP"]
+            #color_col
+            
+            # add information about ring number to dictionary.
+            shapedict['RINGNUM'] = ring+1
+            shapedict['SHAPENUM'] = npoly+1
+            shpinfo.append(shapedict)
+
+        lines = LineCollection(shpsegs,antialiaseds=(1,))
+        if subpref_id == subpref_id2:
+            lines.set_facecolors('g')
+        lines.set_edgecolors('k')
+        lines.set_linewidth(0.3)
+        ax.add_collection(lines)
 
     # data to plot on the map    
     lons = [int]*256
@@ -88,16 +135,13 @@ def plot_gspan_res(G, color_val):
         la.append(lats[v])
         x, y = m(lo, la)
         m.plot(x,y, color = color_val)
-           
-#    figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/gSpan res/238.png" 
-#    print(figure_name)
-#    plt.savefig(figure_name, format = "png")  
+
 
     return plt
 
-def gspan_res():
+def gspan_res(subpref_id):
     
-    subpref_id = 159
+    #subpref_id = 159
     
     import matplotlib.pyplot as plt
     import matplotlib.colors as colors
@@ -127,7 +171,7 @@ def gspan_res():
         
         if elems[0] == 't':
             color_val = scalarMap.to_rgba(values[idx])
-            plt = plot_gspan_res(G, color_val)
+            plt = plot_gspan_res(G, subpref_id, color_val)
             G = nx.DiGraph()
             node_labels = defaultdict(int)
             idx += 1
@@ -144,6 +188,7 @@ def gspan_res():
     figure_name = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/gSpan res/" + str(subpref_id) + ".png" 
     print(figure_name)
     plt.savefig(figure_name, format = "png", dpi = 500)   
+    plt.clf()
      
     return
 
@@ -318,7 +363,10 @@ def graph2_file3(G):
 
     #rd2.gspan_res()
     
-    gspan_res()
+    r = [123, 171 ]
+    
+    for i in [237,238,220,60,144, 65, 194, 132, 154, 69, 39]:
+        gspan_res(i)
     
     return
 
