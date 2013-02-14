@@ -63,12 +63,15 @@ def read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today):
                     old_loc = usr_traj_today[usr][1]  
                     usr_traj_today[usr][0] += subpref_dist[old_loc,subpref]
                     usr_traj_today[usr][1] = subpref
+                    print usr_traj_today[usr][1], usr_traj_today[usr][0]
                 else:
+                    print usr_traj_today[usr][0]
                     usr_day[usr][1] += 1
                     usr_day[usr][0] = call_day
                     usr_traj[usr] += usr_traj_today[usr][0]
                     usr_traj_today[usr][1] = subpref
                     usr_traj_today[usr][0] = 0
+                    print
     
     print i            
     return usr_traj, usr_day, usr_traj_today

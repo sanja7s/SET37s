@@ -121,8 +121,8 @@ import networkx as nx
 # for CLUSTERING data
 #####################################################
 from read_in import clustering_arguments as rd
-from visualize.by_clustering_ags import save_data as s
-from analyze.clustering_args import map_avg_daily_traj as a
+from visualize.by_clustering_ags import map_avg_daily_traj as v
+from analyze.by_clustering_args import save_data as a
 #####################################################
 
 
@@ -432,7 +432,7 @@ def main():
     while True:
         raw_input("Press enter to start a process cycle:\n")
         try:
-            reload(s)
+            reload(v)
             reload(a)
         except NameError:
             _log.error("Could not reload the module.")
@@ -511,8 +511,8 @@ def main():
 #            v.plot_times7s(week_data, weekend_data)
 #            s.save_data_to_file7s(week_data, weekend_data)     
 
-            a.map_data(usr_traj, usr_day)
-            s.save_to_file(usr_traj, usr_day)
+            v.map_data(usr_traj, usr_day)
+            a.save_to_file(usr_traj, usr_day)
             
 
             
