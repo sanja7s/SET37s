@@ -37,6 +37,43 @@ def read_in_file0(c, usr_traj):
     return usr_traj
 
 
+# we want avg traveled dist on daily basis
+def read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today):
+    
+    subpref_dist = find_subpref_distance()
+    i = 0
+    
+    D4D_path_SET3 = "/home/sscepano/DATA SET7S/D4D/SET3TSV"
+    file_name = "SUBPREF_POS_SAMPLE_" + c + ".TSV"
+    #file_name = '100Klines.txt'
+    f_path = join(D4D_path_SET3,file_name)
+    if isfile(f_path) and file_name != '.DS_Store':
+            file7s = open(f_path, 'r')
+            for line in file7s:
+                i = i + 1
+                usr, call_time, subpref = line.split('\t')
+                usr = int(usr)
+                subpref = int(subpref)
+                call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
+                call_day = call_time.date()
+                
+                if usr_day[usr][0] == call_day:
+                    # for each user we hold a dictionary with all the visited subprefs and the number of visits to each
+                    # this is done by increasing the number in the dict each time user visits the subpref
+                    old_loc = usr_traj_today[usr][1]  
+                    usr_traj_today[usr][0] += subpref_dist[old_loc,subpref]
+                    usr_traj_today[usr][1] = subpref
+                else:
+                    usr_day[usr][1] += 1
+                    usr_day[usr][0] = call_day
+                    usr_traj[usr] += usr_traj_today[usr][0]
+                    usr_traj_today[usr][1] = subpref
+                    usr_traj_today[usr][0] = 0
+    
+    print i            
+    return usr_traj, usr_day, usr_traj_today
+
+
 # this is for the first set of parameters
 # home calls, outside of home and total calls
 # the total traveled distance by a user

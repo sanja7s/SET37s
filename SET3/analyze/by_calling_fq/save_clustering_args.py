@@ -8,6 +8,11 @@ from read_in import clustering_arguments as rd0
 from collections import defaultdict
 import math
 
+def daily_avg_traj():
+    
+    
+    return
+
 #def save_data_to_matrix(home_calls, last_usr_loc_n_dist, radius_gyr):
 #    
 #    file_o = "/home/sscepano/D4D res/allstuff/CLUSTERING/ALL_files_clustering_args.tsv"

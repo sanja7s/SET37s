@@ -88,6 +88,16 @@ def save_data_to_file(data):
     
     return
 
+def save_data_to_file2(data):
+    
+    
+    return
+
+def save_data_to_file7s(week_data, weekend_data):
+    
+    
+    return
+
 def analyze_cum_calling_data1(cum_data):
     
     for hr in range(24):

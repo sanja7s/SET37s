@@ -113,10 +113,10 @@ def read_in_file_2graph(c, G, usr_chosen):
     print i            
     return G
 
-def read_in_file_2graph_all_usrs_separate(c, G):
+def read_in_file_2graph_all_usrs_separate(c, G, old_subpref):
     
     
-    old_subpref = 0
+    #old_subpref = 0
     i = 0
     #data = defaultdict(int)
     
@@ -130,17 +130,17 @@ def read_in_file_2graph_all_usrs_separate(c, G):
                 usr = int(usr)
                 i = i + 1
                 subpref = int(subpref)
-                if old_subpref <> 0:
-                    if G[usr].has_edge(old_subpref, subpref):
-                        G[usr][old_subpref][subpref]['weight'] += 1
+                if old_subpref[usr] <> 0:
+                    if G[usr].has_edge(old_subpref[usr], subpref):
+                        G[usr][old_subpref[usr]][subpref]['weight'] += 1
                     else:
-                        G[usr].add_edge(old_subpref, subpref, weight = 1)
-                    old_subpref = subpref
+                        G[usr].add_edge(old_subpref[usr], subpref, weight = 1)
+                    old_subpref[usr] = subpref
                 else:
-                    old_subpref = subpref
+                    old_subpref[usr] = subpref
     
     print i            
-    return G
+    return G, old_subpref
 
 
 def read_in_file_2graph_multiple_users(c, G, usrs_list, last_usr_loc):

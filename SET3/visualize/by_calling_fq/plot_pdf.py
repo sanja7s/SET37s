@@ -47,7 +47,7 @@ def from_file_num_calls(file_name):
 #   test_file_out = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/Obtained_num_calls_and_its_pct.tsv"
 #   fto =  open(test_file_out,"w")
     for j in range(0, max_num_calls):
-        nc_distr_pct[j] = (nc_distr[j] / total_u) * 100
+        nc_distr_pct[j] = (nc_distr[j] / total_u)
 #        fto.write(str(j) + '\t' + str(nc_distr_pct[j]) + '\n')
 
 #    # I was just checking that the total percents sums up to 100 and they do but it looked funny as we have so small values
@@ -62,22 +62,23 @@ def from_file_num_calls(file_name):
 
     plt.figure(1)
 
-    plt.plot(nc_distr_pct, 'ro', linewidth=0.5, label= 'pdf Num of calls')
+    plt.plot(nc_distr_pct, 'r', linewidth=0.5, label= 'distribution of N')
     
     plt.xlabel('N, num of calls')
     plt.ylabel('% Users')
     plt.legend()   
     
 #    # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
-#    plt.yscale('log')
-#    plt.xscale('log')
+    plt.yscale('log')
+    plt.xscale('log')
 #    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/SET3 distr of num of calls loglog.png" 
     
     #this is a regular plot file, then comment the previous loglog block
-    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/SET3 distr of num of calls.png"
+    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/distr of num of calls2.png"
       
     print(figure_name)
-    plt.savefig(figure_name, format = "png")        
+    plt.savefig(figure_name, format = "png", pdi=300) 
+    #plt.show()       
     
 ###############################################################################################################################
 # THIS is to plot fq pdf
@@ -85,6 +86,19 @@ def from_file_num_calls(file_name):
 
     plt.figure(2)
     
+#    fq = []
+#    
+#    for j in range(max_num_calls):
+#        fq.append( float(j / 3360.0))
+#
+#    ffq = []
+#    
+#    for j in range(max_num_calls):
+#        ffq.append(nc_distr_pct[j])
+
+#    for j in range(0, max_num_calls):
+#        nc_distr_pct[j] = (nc_distr[j] / total_u)
+
     fq = []
     
     for j in range(max_num_calls):
@@ -103,16 +117,16 @@ def from_file_num_calls(file_name):
 
 
     # Finally understood here -- when I give two arrays: x, y (at least append values IN ORDER like here) -- pyplot will plot y versus x
-    plt.plot(fq, ffq, 'g.', linewidth=0.3, label= 'pdf fq of calls')
+    plt.plot(fq, ffq, 'g', linewidth=0.3, label= 'distribution of Fq')
     
-    plt.xlabel('fq of calls')
+    plt.xlabel('Fq of calls')
     plt.ylabel('% Users')
     plt.legend()   
     
     # this is if we want loglog lot, otheriwse comment and uncomment next line for regular plot file   
     plt.yscale('log')
     plt.xscale('log')
-    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/SET3 distr of fq of calls loglog.png" 
+    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/distr of fq of calls2.png" 
     
 #    # this is a regular plot file, then comment the previous loglog block
 #    figure_name = "/home/sscepano/D4D res/allstuff/SET3 frequent callers from python/1/SET3 distr of fq of calls.png"
@@ -124,7 +138,7 @@ def from_file_num_calls(file_name):
     return   
 
 ## invoke the function for plotting number of calls and frequency probability distribution (percents of users)
-#from_file_num_calls("/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv")
+from_file_num_calls("/home/sscepano/D4D res/ORGANIZED/SET3/Distr of Num and Fq of Calls/new results -- check the same/Users_and_their_total_calls_number.tsv")
 
 
 def from_fq_files_hist_pdf(): 
@@ -229,10 +243,7 @@ def from_fq_files_hist_pdf():
     return   
 
 ## invoke the function for plotting number of calls and frequency probability distribution (percents of users)
-from_fq_files_hist_pdf()
-
-
-
+#from_fq_files_hist_pdf()
 
 def from_file_home_outside_calls(): 
     

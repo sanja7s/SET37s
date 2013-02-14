@@ -26,17 +26,19 @@ def read_in_file(c, data):
                 usr, call_time, subpref = line.split('\t')
                 subpref = subpref[:-1]
                 call_hour = int(call_time[11:13])
+                call_min = int(call_time[14:17][:-1])
+                #print (call_hour, call_min)
                 #print call_hour
                 subpref = int(subpref)
                 if subpref <> -1:
                     #print subpref
-                    data[subpref][call_hour] += 1
+                    data[subpref][call_hour][call_min] += 1
   
     print i            
     return data
 
 
-def read_in_file_weekends(c, week_data, weekend_data):
+def read_in_file_weekends_min(c, week_data, weekend_data):
     
     i = 0
     #data = defaultdict(int)
@@ -51,19 +53,15 @@ def read_in_file_weekends(c, week_data, weekend_data):
                 usr, call_time, subpref = line.split('\t')
                 subpref = subpref[:-1]
                 call_hour = int(call_time[11:13])
-                #print call_hour
+                call_min = int(call_time[14:17][:-1])
                 subpref = int(subpref)
-                call_date = date(int(call_time[:4]), int(call_time[5:7]), int(call_time[8:10]))
-#                if call_date.weekday() < 5:
-#                    if subpref <> -1:
-#                    #print subpref
-#                        week_data[subpref][call_hour] += 1
-                if call_date.weekday() >= 5:
-                    if subpref <> -1:
-                    #print subpref
-                        weekend_data[subpref][call_hour] += 1
-                
-  
+                if subpref <> -1:
+                    call_date = date(int(call_time[:4]), int(call_time[5:7]), int(call_time[8:10]))
+                    if call_date.weekday() >= 5:
+                        weekend_data[subpref][call_hour][call_min] += 1
+                    else:
+                        week_data[subpref][call_hour][call_min] += 1
+
     print i            
     return week_data, weekend_data
 

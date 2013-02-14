@@ -41,6 +41,10 @@ import dbflib
 from matplotlib.collections import LineCollection
 from matplotlib import cm
 
+def data_2_file(G):
+    
+    return
+
 def plot_gspan_res(G, subpref_id, color_val):
     
     fig = plt.figure(subpref_id)
@@ -227,7 +231,7 @@ def graph2_file3(G):
 #    
 #        usrs_list = rd.read_in_subpref_users(subpref_id)
 #        
-#        file_name2 = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/subpref/all_users_" + str(subpref_id) + ".tsv"
+#        file_name2 = "/home/sscepano/D4D res/allstuff/USER GRAPHS stats/subprefs/all_users_" + str(subpref_id) + ".tsv"
 #        f2 = open(file_name2, "w")
 #        j = 0
 #        
@@ -273,7 +277,7 @@ def graph2_file3(G):
 #                
 #        print j
 
-#    file_name3 = "/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/subpref/all_users.tsv"
+#    file_name3 = "/home/sscepano/D4D res/allstuff/USER GRAPHS stats/ALL/all_users.tsv"
 #    f3 = open(file_name3, "w")
 #
 #    j = 0
@@ -340,11 +344,11 @@ def graph2_file3(G):
 #        testval = G[i].number_of_edges()
 #        
 #        if testval <= 10:
-#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/low_movers.tsv",G[i], i)
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/USER GRAPHS stats/lowmediumhigh/low_movers.tsv",G[i], i)
 #        elif testval <= 100:
-#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/medium_movers.tsv",G[i], i)
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/USER GRAPHS stats/lowmediumhigh/medium_movers.tsv",G[i], i)
 #        else:
-#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/User movements graphs/Graph files gml/usr/high_movers.tsv",G[i], i)
+#            save_users_graphs_for_input_gspan("/home/sscepano/D4D res/allstuff/USER GRAPHS stats/lowmediumhigh/high_movers.tsv",G[i], i)
     
 #    fig3 = plt.figure(3)
 #    ax = fig3.add_subplot(111) 
@@ -363,10 +367,30 @@ def graph2_file3(G):
 
     #rd2.gspan_res()
     
-    r = [123, 171 ]
+#    r = [123, 171 ]
+#    
+#    for i in [237,238,220,60,144, 65, 194, 132, 154, 69, 39]:
+#        gspan_res(i)
     
-    for i in [237,238,220,60,144, 65, 194, 132, 154, 69, 39]:
-        gspan_res(i)
+    
+#    file_name1 = "/home/sscepano/D4D res/allstuff/USER GRAPHS stats/user_number_of_edges_v1.tsv"
+#    file_name2 = "/home/sscepano/D4D res/allstuff/USER GRAPHS stats/user_number_of_nodes_v1.tsv"
+#    file_name3 = "/home/sscepano/D4D res/allstuff/USER GRAPHS stats/user_number_of_displacements_v1.tsv"
+#    
+#    f1 = open(file_name1, "w")
+#    f2 = open(file_name2, "w")
+#    f3 = open(file_name3, "w")
+#    
+#    for i in range(500001):
+#        if i == 3:
+#            print i, G[i].nodes()
+#        f1.write(str(i) + '\t' + str(G[i].number_of_edges()) + '\n')
+#        f2.write(str(i) + '\t' + str(G[i].number_of_nodes()) + '\n')
+#        sum_edge_weight = 0
+#        for u,v,d in G[i].edges(data=True):
+#            sum_edge_weight += d['weight']
+#        f3.write(str(i) + '\t' + str(sum_edge_weight) + '\n')
+    
     
     return
 

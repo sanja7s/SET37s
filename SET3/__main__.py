@@ -101,12 +101,28 @@ import networkx as nx
 #from analyze.by_calling_fq import save_subpref_fq as s
 ######################################################
 
+######################################################
+## find and plot user commuting movements to map
+######################################################
+#from read_in import fq_data as rd
+#from visualize.by_calling_fq import map_usr_movements as v
+#from analyze.by_calling_fq import save_graph_data as s
+######################################################
+
+######################################################
+## call timings
+######################################################
+#from read_in import call_timing_data as rd
+#from visualize.by_call_timing import plot_calls_per_hour as v
+#from analyze.by_call_timing import data_to_file as s
+######################################################
+
 #####################################################
-# find and plot user commuting movements to map
+# for CLUSTERING data
 #####################################################
-from read_in import fq_data as rd
-from visualize.by_calling_fq import map_usr_movements as v
-from analyze.by_calling_fq import save_graph_data as s
+from read_in import clustering_arguments as rd
+from visualize.by_clustering_ags import save_data as s
+from analyze.clustering_args import map_avg_daily_traj as a
 #####################################################
 
 
@@ -323,9 +339,27 @@ def main():
 #    data = defaultdict(int)
 #    for subpref in range(256):
 #        data[subpref] = defaultdict(int)
+#        for i in range(24):
+#            data[subpref][i] = defaultdict(int)
 #    
 #    for c in C:
 #        data = rd.read_in_file(c, data)
+
+#    #######################################################################
+#    # this is for finding WEEKEND argument timing of calls in the subpref (not calculated only from the home users!!!)
+#    #######################################################################
+#    # here we save last location (helps calculating) and user traveled distance
+#    week_data = defaultdict(int)
+#    weekend_data = defaultdict(int)
+#    for subpref in range(256):
+#        week_data[subpref] = defaultdict(int)
+#        weekend_data[subpref] = defaultdict(int)
+#        for i in range(24):
+#            week_data[subpref][i] = defaultdict(int)
+#            weekend_data[subpref][i] = defaultdict(int)
+#    
+#    for c in C:
+#        week_data, weekend_data = rd.read_in_file_weekends_min(c, week_data, weekend_data)
 
 #    #######################################################################
 #    # this is for finding CLUSTERING argument timing of calls in the subpref (not calculated only from the home users!!!)
@@ -374,13 +408,24 @@ def main():
 #    for c in C:
 #        data = rd.read_in_file(c, data)
 
-    G = defaultdict(int)
-    
-    for i in range(500001):
-        G[i] = nx.DiGraph()
+#    G = defaultdict(int)
+#    old_subpref = defaultdict(int)
+#    
+#    for i in range(500001):
+#        G[i] = nx.DiGraph()
+#
+#    for c in C:
+#        G, old_subpref = rd.read_in_file_2graph_all_usrs_separate(c,G,old_subpref)
 
-    for c in C:
-        G = rd.read_in_file_2graph_all_usrs_separate(c,G)
+    usr_traj = defaultdict(int)
+    usr_day = defaultdict(int)
+    usr_traj_today = defaultdict(int)
+    for i in range(500001):
+        usr_day[i] = defaultdict(int)
+        usr_traj_today[i] = defaultdict(int)
+     
+    for c in C:   
+        usr_traj, usr_day, usr_traj_today = rd.read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today)
     
 
     _log.info("Data loaded.")
@@ -388,7 +433,7 @@ def main():
         raw_input("Press enter to start a process cycle:\n")
         try:
             reload(s)
-            reload(v)
+            reload(a)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -449,19 +494,26 @@ def main():
 #            
 #            ####################################################
 
-##            ####################################################
-#            #  subpref fq not only from home
-##            ####################################################
-#            s.data_2_file(data)
-            for i in range(500001):
-                s.graph2_file2(G[i],i)
+#            ####################################################
+            #  subpref fq not only from home
+#            ####################################################
+#            s.data_2_file(G)
+#            for i in range(500001):
+#                s.graph2_file2(G[i],i)
+#            
+#            for i in range(500001):    
+#                v.plot_movements2(G[i], i) 
+##                
+#            s.graph2_file3(G) 
+#            
+#            v.plot_movements3(G) 
+
+#            v.plot_times7s(week_data, weekend_data)
+#            s.save_data_to_file7s(week_data, weekend_data)     
+
+            a.map_data(usr_traj, usr_day)
+            s.save_to_file(usr_traj, usr_day)
             
-            for i in range(500001):    
-                v.plot_movements2(G[i], i) 
-                
-            s.graph2_file3(G) 
-            
-            v.plot_movements3(G) 
 
             
         except Exception as e:
