@@ -24,12 +24,20 @@ def plot_times7s(week_data, weekend_data):
 #            total_calls[subpref_id][hr] = defaultdict(int)
 #            for minute in range(60):
 #                total_calls[subpref_id][hr][minute] = week_data[subpref_id][hr][minute] + weekend_data[subpref_id][hr][minute]
+                
+#    file_name = "/home/sscepano/D4D res/allstuff/call timing/TOTAL_calls.tsv"
+#    f = open(file_name, "w")
+#    
+#    for subpref_id in range(1,256):
+#        for hr in range(24):
+#            for minute in range(60):
+#                f.write(str(subpref_id) + '\t' + str(total_calls[subpref_id]) + '\n')
 #        
 #    from_data_to_timeplot_min_all(total_calls)
 
-#    file_name1 = "/home/sscepano/D4D res/allstuff/call timing/subpref_num_weekday_calls.tsv"
-#    file_name2 = "/home/sscepano/D4D res/allstuff/call timing/subpref_num_weekend_calls.tsv"
-#    file_name3 = "/home/sscepano/D4D res/allstuff/call timing/subpref_pct_weekend_calls.tsv"
+#    file_name1 = "/home/sscepano/D4D res/allstuff/call timing/subpref_num_weekday_callsv2.tsv"
+#    file_name2 = "/home/sscepano/D4D res/allstuff/call timing/subpref_num_weekend_callsv2.tsv"
+#    file_name3 = "/home/sscepano/D4D res/allstuff/call timing/subpref_pct_weekend_callsv2.tsv"
 #    
 #    f1 = open(file_name1, "w")
 #    f2 = open(file_name2, "w")
@@ -38,12 +46,12 @@ def plot_times7s(week_data, weekend_data):
 #    for subpref_id in range(1,255):
 #        weekday_calls = 0
 #        for hr in range(24):
-#            for minute in week_data[hr].iterkeys():
+#            for minute in week_data[subpref_id][hr].iterkeys():
 #                weekday_calls += week_data[subpref_id][hr][minute]
 #        f1.write(str(subpref_id) + '\t' + str(weekday_calls) + '\n')
 #        weekdend_calls = 0
 #        for hr in range(24):
-#            for minute in weekend_data[hr].iterkeys():
+#            for minute in weekend_data[subpref_id][hr].iterkeys():
 #                weekdend_calls += weekend_data[subpref_id][hr][minute]
 #        f2.write(str(subpref_id) + '\t' + str(weekdend_calls) + '\n')
 #        if weekday_calls <> 0:
@@ -61,37 +69,116 @@ def plot_times7s(week_data, weekend_data):
 #    
 #    print_cumulative_call_timing_data_min(cum_data)
 
-    total_cum1 = get_cumulative_call_timing_data_min_total(week_data)
-    total_cum2 = get_cumulative_call_timing_data_min_total(weekend_data)
+#    total_cum1 = get_cumulative_call_timing_data_min_total(week_data)
+#    total_cum2 = get_cumulative_call_timing_data_min_total(weekend_data)
 #    
 #    print analyze_cum_calling_data_min1(total_cum2)
 #    print analyze_cum_calling_data_min2(total_cum2)
 
-    wake_up_min = defaultdict(int)
-    sleep_min = defaultdict(int)
-    pct30_min = defaultdict(int)
-    pct40_min = defaultdict(int)
-    pct50_min = defaultdict(int)
-    pct90_min = defaultdict(int)
+#    wake_up_min = defaultdict(int)
+#    sleep_min = defaultdict(int)
+#    pct30_min = defaultdict(int)
+#    pct40_min = defaultdict(int)
+#    pct50_min = defaultdict(int)
+#    pct90_min = defaultdict(int)
     
 #    cum_data = get_cumulative_call_timing_data_min(data[120])
 #    wake_up_minc = analyze_cum_calling_data_min1(cum_data)
 #    sleep_minc = analyze_cum_calling_data_min2(cum_data)
 
-    for subpref_id in range(1,256):
-        cum_data = get_cumulative_call_timing_data_min(week_data[subpref_id])
-        wake_up_min[subpref_id] = analyze_cum_calling_data_min1(cum_data)
-        sleep_min[subpref_id] = analyze_cum_calling_data_min2(cum_data)
-        pct30_min[subpref_id] = analyze_cum_calling_data_min30pct(cum_data)
-        pct40_min[subpref_id] = analyze_cum_calling_data_min40pct(cum_data)
-        pct50_min[subpref_id] = analyze_cum_calling_data_min50pct(cum_data)
-        pct90_min[subpref_id] = analyze_cum_calling_data_min90pct(cum_data)
+#    for subpref_id in range(1,256):
+#        cum_data = get_cumulative_call_timing_data_min(week_data[subpref_id])
+#        wake_up_min[subpref_id] = analyze_cum_calling_data_min1(cum_data)
+#        sleep_min[subpref_id] = analyze_cum_calling_data_min2(cum_data)
+#        pct30_min[subpref_id] = analyze_cum_calling_data_min30pct(cum_data)
+#        pct40_min[subpref_id] = analyze_cum_calling_data_min40pct(cum_data)
+#        pct50_min[subpref_id] = analyze_cum_calling_data_min50pct(cum_data)
+#        pct90_min[subpref_id] = analyze_cum_calling_data_min90pct(cum_data)
         
 #    print wake_up_minc
 #    print sleep_minc
     
-    save_times_to_file(wake_up_min)
+#    save_times_to_file(wake_up_min)
     #save_times_to_file(pct90_min)
+    
+#    avg_min_subpref = defaultdict(float)
+#    total_subpref0 = defaultdict(float)
+#    
+#    for subpref_id in range(1,256):
+#        weekday_calls = 0
+#        mins = 0
+#        for hr in range(24):
+#            for minute in week_data[subpref_id][hr].iterkeys():
+#                weekday_calls += week_data[subpref_id][hr][minute]
+#                mins += 1
+#        avg_min_subpref[subpref_id] = weekday_calls / float(mins)
+#        total_subpref0[subpref_id]  = weekday_calls
+#        #print float(mins)
+#        
+#    midnight_pct = defaultdict(float)
+#    
+#    #print float(mins)
+#    #print avg_min_subpref[220]
+#    
+#    file_name = "/home/sscepano/D4D res/allstuff/call timing/subpref_pct_midnight_fq.tsv"
+#    f = open(file_name, "w")
+#    
+#    for subpref_id in range(1,256):
+#        midnight_hour = 0
+#        for minute in week_data[subpref_id][0].iterkeys():
+#            midnight_hour += week_data[subpref_id][hr][minute]
+#        if avg_min_subpref[subpref_id] > 0:
+#            midnight_pct[subpref_id] = midnight_hour / float(avg_min_subpref[subpref_id] * 60)
+#            f.write(str(subpref_id) + '\t' + str(midnight_pct[subpref_id]) + '\n')
+#    
+    
+    
+    
+    
+    avg_min_subpref = defaultdict(float)
+    total_subpref = defaultdict(float)
+    
+    for subpref_id in range(1,256):
+        weekday_calls = 0
+        mins = 0
+        for hr in range(24):
+            for minute in weekend_data[subpref_id][hr].iterkeys():
+                weekday_calls += weekend_data[subpref_id][hr][minute]
+                mins += 1
+        avg_min_subpref[subpref_id] = weekday_calls / float(mins)
+        total_subpref[subpref_id]  = weekday_calls
+        
+#    print total_subpref[7] + total_subpref0[7]
+        
+    midnight_pct = defaultdict(float)
+    
+    
+    print avg_min_subpref[254]
+    
+    file_name = "/home/sscepano/D4D res/allstuff/call timing/weekend_subpref_pct_midnight1v7s_fq.tsv"
+    file_name2 = "/home/sscepano/D4D res/allstuff/call timing/weekend_subpref_01avg_fq.tsv"
+    f = open(file_name, "w")
+    f2 = open(file_name2, "w")
+    
+    for subpref_id in range(1,256):
+        midnight_hour = 0
+        for minute in weekend_data[subpref_id][1].iterkeys():
+            midnight_hour += weekend_data[subpref_id][1][minute]
+        if avg_min_subpref[subpref_id] > 0:
+            midnight_pct[subpref_id] = midnight_hour / float(avg_min_subpref[subpref_id] * 60)
+            f.write(str(subpref_id) + '\t' + str(midnight_pct[subpref_id]) + '\n')
+            
+            
+    for subpref_id in range(1,256):
+        found = False
+        for hr in [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3]:
+            for minute in weekend_data[subpref_id][hr].iterkeys():
+                if not found:
+                    if weekend_data[subpref_id][hr][minute] >= avg_min_subpref[subpref_id]*0.1:
+                        subpref_05_min = 60*hr+minute
+                        found = True      
+        f2.write(str(subpref_id) + '\t' + str(subpref_05_min) + '\n')
+
     
     return
 

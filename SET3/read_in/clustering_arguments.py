@@ -54,8 +54,9 @@ def read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today):
                 usr, call_time, subpref = line.split('\t')
                 usr = int(usr)
                 subpref = int(subpref)
-                call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
-                call_day = call_time.date()
+                #call_time = datetime.strptime(call_time, '%Y-%m-%d %H:%M:%S')
+                call_day = call_time[0:10]
+                #print call_day
                 
                 if usr_day[usr][0] == call_day:
                     # for each user we hold a dictionary with all the visited subprefs and the number of visits to each
@@ -63,15 +64,15 @@ def read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today):
                     old_loc = usr_traj_today[usr][1]  
                     usr_traj_today[usr][0] += subpref_dist[old_loc,subpref]
                     usr_traj_today[usr][1] = subpref
-                    print usr_traj_today[usr][1], usr_traj_today[usr][0]
+                    #print usr_traj_today[usr][1], usr_traj_today[usr][0]
                 else:
-                    print usr_traj_today[usr][0]
+                    #print usr_traj_today[usr][0]
                     usr_day[usr][1] += 1
                     usr_day[usr][0] = call_day
                     usr_traj[usr] += usr_traj_today[usr][0]
                     usr_traj_today[usr][1] = subpref
                     usr_traj_today[usr][0] = 0
-                    print
+                    #print
     
     print i            
     return usr_traj, usr_day, usr_traj_today

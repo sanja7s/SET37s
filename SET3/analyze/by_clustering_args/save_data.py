@@ -13,14 +13,17 @@ def save_to_file(usr_traj, usr_day):
     avg_usr_traj = defaultdict(float)
     
     for usr in range(500001):
-        avg_usr_traj[usr] = usr_traj[usr] / float(usr_day[usr][1])
+        if usr_day[usr][1] > 0:
+            avg_usr_traj[usr] = usr_traj[usr] / float(usr_day[usr][1])
+            
+    save_to_plot(avg_usr_traj)
         
         
-    file_name = "/home/sscepano/D4D res/allstuff/traj/avg daily/usr_avg_Daily_traj.tsv"
-    f = open(file_name, "w")
-    
-    for usr in range(500001):
-        f.write(str(usr) + '\t' + str(avg_usr_traj[usr] + '\n'))
+#    file_name = "/home/sscepano/D4D res/allstuff/traj/avg daily/usr_avg_Daily_traj.tsv"
+#    f = open(file_name, "w")
+#    
+#    for usr in range(500001):
+#        f.write(str(usr) + '\t' + str(avg_usr_traj[usr]) + '\n')
         
         
         
@@ -39,12 +42,14 @@ def save_to_file(usr_traj, usr_day):
 #                fs.write(str(usr) + '\t' + str(avg_usr_traj[usr]) + '\n')
 #                subpref_sum += avg_usr_traj[usr]
 #                usrs_sum += 1
-#        fst.write(str(subpref) + '\t' + str(subpref_sum/float(usrs_sum)) + '\n')
-#        subpref_usrs = rd.read_in_subpref_num_users()[subpref]
-#        if subpref_usrs == usrs_sum:
-#            print 'yes ' + str(subpref)
-#        else:
-#            print 'no ' + str(subpref)
+#        if usrs_sum > 0:
+#            avg_subpref_daily_traj = subpref_sum/float(usrs_sum)
+#            fst.write(str(subpref) + '\t' + str(avg_subpref_daily_traj) + '\n')
+#            subpref_usrs = rd.read_in_subpref_num_users()[subpref]
+#            if subpref_usrs == usrs_sum:
+#                print 'yes ' + str(subpref)
+#            else:
+#                print 'no ' + str(subpref)
                  
         
     return

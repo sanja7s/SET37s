@@ -117,14 +117,21 @@ import networkx as nx
 #from analyze.by_call_timing import data_to_file as s
 ######################################################
 
-#####################################################
-# for CLUSTERING data
-#####################################################
-from read_in import clustering_arguments as rd
-from visualize.by_clustering_ags import map_avg_daily_traj as v
-from analyze.by_clustering_args import save_data as a
-#####################################################
+######################################################
+## for CLUSTERING data
+######################################################
+#from read_in import clustering_arguments as rd
+#from visualize.by_clustering_ags import map_avg_daily_traj as v
+#from analyze.by_clustering_args import save_data as a
+######################################################
 
+#####################################################
+# diversity
+#####################################################
+from read_in import diversity_user_index as rd
+from visualize.by_num_visited_subprefs import map_diversity as v
+from analyze.by_num_visited_subprefs import diversity as a
+#####################################################
 
 _log = logging.getLogger(__name__)
 
@@ -372,7 +379,7 @@ def main():
 #        weekend_data[subpref] = defaultdict(int)
 #    
 #    for c in C:
-#        week_data, weekend_data = rd.read_in_file_weekends(c, week_data, weekend_data)
+#        week_data, weekend_data = rd.read_in_file_weekends_min(c, week_data, weekend_data)
 
 
 #    #######################################################################
@@ -417,16 +424,27 @@ def main():
 #    for c in C:
 #        G, old_subpref = rd.read_in_file_2graph_all_usrs_separate(c,G,old_subpref)
 
-    usr_traj = defaultdict(int)
-    usr_day = defaultdict(int)
-    usr_traj_today = defaultdict(int)
-    for i in range(500001):
-        usr_day[i] = defaultdict(int)
-        usr_traj_today[i] = defaultdict(int)
-     
-    for c in C:   
-        usr_traj, usr_day, usr_traj_today = rd.read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today)
+#    usr_traj = defaultdict(int)
+#    usr_day = defaultdict(int)
+#    usr_traj_today = defaultdict(int)
+#    for i in range(500001):
+#        usr_day[i] = defaultdict(int)
+#        usr_traj_today[i] = defaultdict(int)
+#     
+#    for c in C:   
+#        usr_traj, usr_day, usr_traj_today = rd.read_in_file_avg_daily_traj(c, usr_traj, usr_day, usr_traj_today)
     
+    
+    #######################################################################
+    # this is for finding WEEKEND argument timing of calls in the subpref (not calculated only from the home users!!!)
+    #######################################################################
+    # here we save last location (helps calculating) and user traveled distance
+    data = defaultdict(int)
+    for usr in range(500001):
+        data[usr] = defaultdict(int)
+
+    for c in C:
+        data = rd.read_in_file(c, data)
 
     _log.info("Data loaded.")
     while True:
@@ -434,6 +452,7 @@ def main():
         try:
             reload(v)
             reload(a)
+            #reload(s)
         except NameError:
             _log.error("Could not reload the module.")
         try:
@@ -511,10 +530,11 @@ def main():
 #            v.plot_times7s(week_data, weekend_data)
 #            s.save_data_to_file7s(week_data, weekend_data)     
 
-            v.map_data(usr_traj, usr_day)
-            a.save_to_file(usr_traj, usr_day)
+#            v.map_data(usr_traj, usr_day)
+#            a.save_to_file(usr_traj, usr_day)
             
-
+            a.calculate_diversity(data)
+            v.map_diversity(data)
             
         except Exception as e:
             _log.error("Caught exception from the process\n%s\n%s" % (e, traceback.format_exc()))
